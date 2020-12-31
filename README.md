@@ -46,4 +46,4 @@ Starts the backend
 ## After Running
 
 We can send csv files and specify date range on the react frontend on localhost:3000\
-Then the data in csv will be sent to terminal
+Then the data in csv will be sent to the backend terminal.
