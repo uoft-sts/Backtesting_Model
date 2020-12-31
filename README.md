@@ -7,6 +7,7 @@ In the project directory, you can start the React frontend by going to **Termina
 ### `npm install`
 
 Installs NPM -- node packages into the project folder
+(Only need to install once)
 
 ### `npm start`
 
@@ -22,21 +23,23 @@ Next, we start the backend Flask API and we must run it in a **NEW Terminal** or
 
 Goes into api folder which is the backend (flask) folder
 
-### For Mac 
+For Mac:
 
 ### `python3 -m venv venv`
 ### `source venv/bin/activate`
 
-### For Windows
+For Windows:
 
 ### `python -m venv venv`
 ### `venv\Scripts\activate`
 
-Sets up the virtual environment (venv) and activates it
+Sets up the virtual environment (venv) and activates it\
+Note: you only need to run the second activate script for the second time and afterwards
 
 ### `pip install flask python-dotenv`
 
 Installs flask + python-dotenv package, then we are good to run
+(Only need to install once)
 
 ### `flask run`
 
