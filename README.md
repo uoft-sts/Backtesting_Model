@@ -1,8 +1,12 @@
 # STS Backtesting Model
 
-## Available Scripts
+## Scripts to get it running
 
-In the project directory, you can run:
+In the project directory, you can start the React frontend by going to **Terminal** or **Command Prompt**:
+
+### `npm install`
+
+Installs NPM -- node packages into the project folder
 
 ### `npm start`
 
@@ -12,14 +16,34 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
+Next, we start the backend Flask API and we must run it in a **NEW Terminal** or **Command Prompt**:
 
-Launches the test runner in the interactive watch mode.\
+### `cd api`
 
-### `npm run build`
+Goes into api folder which is the backend (flask) folder
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### For Mac 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `python3 -m venv venv`
+### `source venv/bin/activate`
+
+### For Windows
+
+### `python -m venv venv`
+### `venv\Scripts\activate`
+
+Sets up the virtual environment (venv) and activates it
+
+### `pip install flask python-dotenv`
+
+Installs flask + python-dotenv package, then we are good to run
+
+### `flask run`
+
+Starts the backend
+
+
+## After Running
+
+We can send csv files and specify date range on the react frontend on localhost:3000\
+Then the data in csv will be sent to terminal
