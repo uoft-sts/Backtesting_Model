@@ -77,7 +77,7 @@ class Roll_Dates_Last_Trading_Day(File_Reader):
         concat['Time'] = np.array(concat.Time.values, dtype = np.datetime64)
         
         duplicate = concat[concat.duplicated(['Time'], keep = 'first')].index
-        concat = concat.drop(duplicate)
+        concat = concat.drop(duplicate).set_index('Time')
         concat.to_csv(self.output_file_path, encoding = 'utf-8', sep = ',', header = True,
                       index = True)
         return concat
