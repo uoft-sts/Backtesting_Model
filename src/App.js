@@ -41,7 +41,15 @@ function App(){
           <label for="underlying">Underlying:</label><br />
           <input type="text" id="underlying" name="underlying" placeholder="Ex: a, AL"/><br /><br />
           <label for="expmonth">Expiration Month:</label><br />
-          <input type="text" id="expmonth" name="expmonth" placeholder="Ex: 08, 11"/><br />
+          <input type="text" id="expmonth" name="expmonth" placeholder="Ex: 08, 11"/><br /><br />
+          <label for="method">Select a method:</label><br />
+          <div class="select-style">
+            <select name="method" id="method">
+              <option name="fom">First Of Month</option>
+              <option name="ltd">Last Trading Day</option>
+              <option name="lb">Liquidity Based</option>
+            </select>
+          </div>
           <br />
           <div>
             <DateRangePicker
