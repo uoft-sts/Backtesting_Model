@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, render_template
 from index_setter import set_index
 from werkzeug.utils import secure_filename
-from file_reader import File_Reader, Roll_Dates_First_Of_Month, Roll_Dates_Last_Trading_Day
+from file_reader import File_Reader, Roll_Dates_First_Of_Month, Roll_Dates_Last_Trading_Day, Roll_Dates_Liquidity_Based
 import time
 import csv
 import os
@@ -16,6 +16,7 @@ def result():
     daterange_to = request.form.get('daterange_to')
     underlying = request.form.get('underlying')
     expmonth = request.form.get('expmonth')
+    method = request.form.get('method')
     input_path = '/Users/kev/Documents/GitHub/Backtesting_Model/api/data/'
     output_path = '/Users/kev/Documents/GitHub/Backtesting_Model/api/data/'
     if 'file' in request.files:
@@ -26,20 +27,31 @@ def result():
             f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))          
             f_name.append(f.filename)
             set_index(input_path, output_path)
-            a = Roll_Dates_Last_Trading_Day(underlying, expmonth, 
+            if method == "First Of Month":
+                a = Roll_Dates_First_Of_Month(underlying, expmonth, 
+                              input_file_path = '/Users/kev/Documents/GitHub/Backtesting_Model/api/data/',
+                              output_file_path = '/Users/kev/Desktop/sample.csv')
+            elif method == "Last Trading Day":
+                a = Roll_Dates_Last_Trading_Day(underlying, expmonth, 
+                              input_file_path = '/Users/kev/Documents/GitHub/Backtesting_Model/api/data/',
+                              output_file_path = '/Users/kev/Desktop/sample.csv')
+            elif method == "Liquidity Based":
+                a = Roll_Dates_Liquidity_Based(underlying, expmonth, 
                               input_file_path = '/Users/kev/Documents/GitHub/Backtesting_Model/api/data/',
                               output_file_path = '/Users/kev/Desktop/sample.csv')
             df = a.expiration_filter()
             df_ = a.fit_transform(df)
+            df_ = df_.loc[daterange_from:daterange_to]
             print(df_)
             #with open(os.path.join("./data/", f.filename)) as csv_file:
             #    reader = csv.reader(csv_file)
                 
     return '''<h1>Underlying: {}</h1>
             <h1>Expiration Month: {}</h1>
+            <h1>Method: {}</h1>
             <h1>Date starts at: {}</h1>
             <h1>Date ends at: {}</h1>
-            <h1>Files: {}</h1>'''.format(underlying, expmonth, daterange_from, daterange_to, f_name)
+            <h1>Files: {}</h1>'''.format(underlying, expmonth, method, daterange_from, daterange_to, f_name)
 
 @app.route('/time')
 def get_current_time():
