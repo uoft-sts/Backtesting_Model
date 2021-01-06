@@ -4,12 +4,23 @@
 }
 
 .App-logo {
-  height: 50vmin;
+  height: 35vmin;
   pointer-events: none;
 }
 
 input[type="file"] {
   display: none;
+}
+
+input[type=text] {
+  padding:10px;
+  border:0;
+  box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
+}
+
+label {
+  color: black;
+  padding: 8px;
 }
 
 .file-upload {
