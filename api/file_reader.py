@@ -55,7 +55,8 @@ class File_Reader:
 
 class Roll_Dates_First_Of_Month(File_Reader):
     def fit_transform(self, X):
-        concat = pd.concat([pd.read_csv(self.file_path + f,
+        X.File_Name.sort_index()
+        concat = pd.concat([pd.read_csv(self.file_path + '/' + f,
                                         encoding = 'utf-8', sep = ',') for f in X.File_Name],
                                         join = 'outer')
         concat.dropna(how = 'any', inplace = True)
@@ -70,7 +71,8 @@ class Roll_Dates_First_Of_Month(File_Reader):
 
 class Roll_Dates_Last_Trading_Day(File_Reader):
     def fit_transform(self, X):
-        concat = pd.concat([pd.read_csv(self.file_path + f,
+        X.File_Name.sort_index()
+        concat = pd.concat([pd.read_csv(self.file_path + '/' + f,
                                         encoding = 'utf-8', sep = ',') for f in X.File_Name],
                                         join = 'outer')
         concat.dropna(how = 'any', inplace = True)

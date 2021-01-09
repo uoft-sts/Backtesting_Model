@@ -7,3 +7,5 @@ Dropzone.options.dropper = {
     maxFilesize: 1025, // megabytes
     chunkSize: 1000000 // bytes
 }
+
+export default Dropper;
