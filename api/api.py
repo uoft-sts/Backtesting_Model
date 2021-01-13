@@ -79,11 +79,16 @@ def result():
             fig.savefig('./templates/static/temp.png', dpi=fig.dpi)
             #with open(os.path.join("./data/", f.filename)) as csv_file:
             #    reader = csv.reader(csv_file)
+
             data = []
+            '''
+            #get df (only 3 of the needed columns) and convert it to array
+            data = df[["date","Buy_Signal_Price","Sell_Signal_Price"]].to_numpy() #how to get the first column index data?
+            '''
             for i in range(len(df_)):
                 if not math.isnan(df_.iloc[i]["Buy_Signal_Price"]) or not math.isnan(df_.iloc[i]["Sell_Signal_Price"]):
                     print(df_.index.date[i], df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"])
-                    data.append([df_.index.date[i], df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"]])
+                    data.append([df_.index.date[i].astype(int), df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"]])
             
             good_data = []
             # np.where to vectorizely calculate
@@ -99,8 +104,8 @@ def result():
             good_data_arr = np.concatenate([Buy_data_arr,Sell_data_arr],axis=1)
 
             record_df = pd.DataFrame(good_data_arr, 
-                  columns =['Entry_Date', 'Entry_Price', 'Exit_Price', 'Exit_Date', "Percentage_Change", "Long/Short"]) 
-                  
+                  columns =['Entry_Date', 'Entry_Price','Buy_data_nan', 'Exit_Price','Sell_data_nan', 'Exit_Date', "Percentage_Change", "Long/Short"]) 
+            record_df.drop(columns=['Buy_data_nan','Sell_data_nan'])
             #then print(record_df) and keep going
             '''
             # C_arr = np.asarray(C) to translate list to array
