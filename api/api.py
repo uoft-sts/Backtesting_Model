@@ -128,7 +128,7 @@ def result():
             cum_ret = 0
             #added by Jon, a vectorization way to get the sum
             ret_all_trade_arr = np.asarray(ret_all_trade)
-            cum_ret_arr = ret_all_trade_arr.sum
+            cum_ret = np.sum(ret_all_trade_arr)
             #for i in range(len(ret_all_trade)):
             #    cum_ret += ret_all_trade[i]
             
@@ -166,7 +166,10 @@ def result():
             # Sharpe Ratio, default risk-free interest rate is 4%
             risk_free = 0.04
             excess_return = ann_ret - risk_free
-            sharpe = excess_return/ann_ret
+            if ann_ret != 0:
+                sharpe = excess_return/ann_ret
+            else:
+                sharpe = 0
             
             print(ret_all_trade)
             print("Cumulative Return: ", round(cum_ret,4))
