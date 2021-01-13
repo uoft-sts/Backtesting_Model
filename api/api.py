@@ -27,8 +27,8 @@ def result():
     underlying = request.form.get('underlying')
     expmonth = request.form.get('expmonth')
     method = request.form.get('method')
-    input_path = 'Users/jonathan/Documents/个人资料/STS/BECKTSTN_desktop/Backtesting_Model/api/data/'
-    output_path = 'Users/jonathan/Documents/个人资料/STS/BECKTSTN_desktop/Backtesting_Model/api/data/'
+    input_path = '/Users/kev/Documents/GitHub/Backtesting_Model/api/data/'
+    output_path = '/Users/kev/Documents/GitHub/Backtesting_Model/api/data/'
     if 'file' in request.files:
         f = request.files.get('file')
         f_name = []
@@ -39,16 +39,16 @@ def result():
             set_index(input_path, output_path)
             if method == "First Of Month":
                 a = Roll_Dates_First_Of_Month(underlying, expmonth, 
-                              input_file_path = 'Users/jonathan/Documents/个人资料/STS/BECKTSTN_desktop/Backtesting_Model/api/data/',
-                              output_file_path = '/Users/jonathan/Desktop/sample.csv')
+                              input_file_path = '/Users/kev/Documents/GitHub/Backtesting_Model/api/data/',
+                              output_file_path = '/Users/kev/Desktop/sample.csv')
             elif method == "Last Trading Day":
                 a = Roll_Dates_Last_Trading_Day(underlying, expmonth, 
-                              input_file_path = 'Users/jonathan/Documents/个人资料/STS/BECKTSTN_desktop/Backtesting_Model/api/data/',
-                              output_file_path = '/Users/jonathan/Desktop/sample.csv')
+                              input_file_path = '/Users/kev/Documents/GitHub/Backtesting_Model/api/data/',
+                              output_file_path = '/Users/kev/Desktop/sample.csv')
             elif method == "Liquidity Based":
                 a = Roll_Dates_Liquidity_Based(underlying, expmonth, 
-                              input_file_path = 'Users/jonathan/Documents/个人资料/STS/BECKTSTN_desktop/Backtesting_Model/api/data/',
-                              output_file_path = '/Users/jonathan/Desktop/sample.csv')
+                              input_file_path = '/Users/kev/Documents/GitHub/Backtesting_Model/api/data/',
+                              output_file_path = '/Users/kev/Desktop/sample.csv')
             df = a.expiration_filter()
             #print(df)
             df_ = a.fit_transform(df)
