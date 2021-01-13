@@ -94,7 +94,7 @@ def result():
                 del data[-1]
 
             arr = np.arange(len(data))
-            #using vector to separate buy and sell, then we can use mysql to merge
+            #using vector to separate buy and sell, then we can use another numpy function to merge
 
             Buy_data_arr=data[arr % 2 ==0]
             Sell_data_arr=data[arr % 2 !==0]
@@ -128,10 +128,10 @@ def result():
             # Cummulative return
             cum_ret = 0
             #added by Jon, a vectorization way to get the sum
-            #ret_all_trade_arr = np.asarray(ret_all_trade)
-            #cum_ret_arr = ret_all_trade_arr.sum
-            for i in range(len(ret_all_trade)):
-                cum_ret += ret_all_trade[i]
+            ret_all_trade_arr = np.asarray(ret_all_trade)
+            cum_ret_arr = ret_all_trade_arr.sum
+            #for i in range(len(ret_all_trade)):
+            #    cum_ret += ret_all_trade[i]
             
             # Annual Return
             ann_ret = cum_ret/365*240
@@ -139,7 +139,7 @@ def result():
             # Win Percentage
             win = 0
             loss = 0
-            '''
+            
             win_arr = (ret_all_trade_arr > 0).sum()
             loss_arr = (ret_all_trade_arr !> 0).sum()
             
@@ -149,10 +149,11 @@ def result():
                     win+=1
                 else:
                     loss+=1
-            win_percent = win/len(ret_all_trade)
+            '''
+            win_percent = win_arr/len(ret_all_trade)
             
             # Win/Loss Ratio
-            win_loss_ratio = win/loss
+            win_loss_ratio = win_arr/loss_arr
             
             # Beta
             
