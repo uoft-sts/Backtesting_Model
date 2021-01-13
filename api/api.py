@@ -82,8 +82,15 @@ def result():
 
             data = []
             '''
-            #get df (only 3 of the needed columns) and convert it to array
+            #get data by having df (only 3 of the needed columns) and convert it to array
             data = df[["date","Buy_Signal_Price","Sell_Signal_Price"]].to_numpy() #how to get the first column index data?
+
+            #take out the bad data in 1st and last line
+            if math.isnan(data[0][1]):
+                np.delete(data[0],0)
+            if math.isnan(data[-1][2]):
+                np.delete(data[-1],0)
+            
             '''
             for i in range(len(df_)):
                 if not math.isnan(df_.iloc[i]["Buy_Signal_Price"]) or not math.isnan(df_.iloc[i]["Sell_Signal_Price"]):
@@ -100,7 +107,12 @@ def result():
             #using vector to separate buy and sell, then we can use another numpy function to merge
             arr = np.arange(len(data))
             Buy_data_arr=data[arr % 2 ==0]
+            #delete the nan column
+            #np.delete(Buy_data_arr,2,1)
             Sell_data_arr=data[arr % 2 == 1]
+            #delete the nan column
+            #np.delete(Sell_data_arr,2,1)
+            #afterwards, you wont worry about dropping column in dataframe
             good_data_arr = np.concatenate([Buy_data_arr,Sell_data_arr],axis=1)
 
             record_df = pd.DataFrame(good_data_arr, 
