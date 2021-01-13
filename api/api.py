@@ -14,6 +14,7 @@ import logging
 import glob
 import talib as ta
 import math
+import numpy as np
 matplotlib.use('Agg')
 
 UPLOAD_FOLDER = './data/'
@@ -84,6 +85,26 @@ def result():
                     print(df_.index.date[i], df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"])
                     data.append([df_.index.date[i], df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"]])
             good_data = []
+            # np.where to vectorizely calculate
+            '''
+            if math.isnan(data[0][1]):
+                del data[0]
+            if math.isnan(data[-1][2]):
+                del data[-1]
+
+            arr = np.arange(len(data))
+            #using vector to separate buy and sell, then we can use mysql to merge
+
+            Buy_data_arr=data[arr % 2 ==0]
+            Sell_data_arr=data[arr % 2 !==0]
+            good_data_arr = np.concatenate([But_data_arr,Sell_data_arr],axis=1)
+
+            record_df = pd.DataFrame(good_data_arr, 
+                  columns =['Entry_Date', 'Entry_Price', 'Exit_Price', 'Exit_Date', "Percentage_Change", "Long/Short"]) 
+                  
+            #then print(record_df) and keep going
+            '''
+            # C_arr = np.asarray(C) to translate list to array
             for i in range(len(data)):
                 if i != len(data) - 1 and not math.isnan(data[i][1]):
                     pair = [data[i][0], data[i][1]]
@@ -104,6 +125,9 @@ def result():
             
             # Cummulative return
             cum_ret = 0
+            #added by Jon, a vectorization way to get the sum
+            #ret_all_trade_arr = np.asarray(ret_all_trade)
+            #cum_ret_arr = ret_all_trade_arr.sum
             for i in range(len(ret_all_trade)):
                 cum_ret += ret_all_trade[i]
             
@@ -113,6 +137,11 @@ def result():
             # Win Percentage
             win = 0
             loss = 0
+            '''
+            win_arr = (ret_all_trade_arr > 0).sum()
+            loss_arr = (ret_all_trade_arr !> 0).sum()
+            
+            '''
             for i in range(len(ret_all_trade)):
                 if ret_all_trade[i] > 0:
                     win+=1
