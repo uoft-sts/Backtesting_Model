@@ -83,6 +83,9 @@ def result():
                 if not math.isnan(df_.iloc[i]["Buy_Signal_Price"]) or not math.isnan(df_.iloc[i]["Sell_Signal_Price"]):
                     print(df_.index.date[i], df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"])
                     data.append([df_.index.date[i], df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"]])
+            
+            print(data)
+            
             good_data = []
             for i in range(len(data)):
                 if i != len(data) - 1 and not math.isnan(data[i][1]):
@@ -93,6 +96,10 @@ def result():
                     pair.append(change)
                     pair.append("Long")
                     good_data.append(pair)
+                    print(pair)
+            
+            print(good_data)
+            
             record_df = pd.DataFrame(good_data, 
                   columns =['Entry_Date', 'Entry_Price', 'Exit_Price', 'Exit_Date', "Percentage_Change", "Long/Short"]) 
             print(record_df)
