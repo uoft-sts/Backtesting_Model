@@ -87,17 +87,15 @@ def result():
             
             good_data = []
             # np.where to vectorizely calculate
-            '''
+            #to clean the data 
             if math.isnan(data[0][1]):
                 del data[0]
             if math.isnan(data[-1][2]):
                 del data[-1]
-
-            arr = np.arange(len(data))
             #using vector to separate buy and sell, then we can use another numpy function to merge
-
+            arr = np.arange(len(data))
             Buy_data_arr=data[arr % 2 ==0]
-            Sell_data_arr=data[arr % 2 !==0]
+            Sell_data_arr=data[arr % 2 == 1]
             good_data_arr = np.concatenate([But_data_arr,Sell_data_arr],axis=1)
 
             record_df = pd.DataFrame(good_data_arr, 
@@ -118,6 +116,7 @@ def result():
             
             record_df = pd.DataFrame(good_data, 
                   columns =['Entry_Date', 'Entry_Price', 'Exit_Price', 'Exit_Date', "Percentage_Change", "Long/Short"]) 
+            '''
             print(record_df)
             record_df.to_csv('/Users/kev/Desktop/trade_record.csv', encoding = 'utf-8', sep = ',', header = True,
                       index = True)
@@ -141,7 +140,7 @@ def result():
             loss = 0
             
             win_arr = (ret_all_trade_arr > 0).sum()
-            loss_arr = (ret_all_trade_arr !> 0).sum()
+            loss_arr = (ret_all_trade_arr <= 0).sum()
             
             '''
             for i in range(len(ret_all_trade)):
