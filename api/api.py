@@ -77,47 +77,39 @@ def result():
             plt.ylabel('ADOSC Value')
 
             fig.savefig('./templates/static/temp.png', dpi=fig.dpi)
-            #with open(os.path.join("./data/", f.filename)) as csv_file:
-            #    reader = csv.reader(csv_file)
+            # Data Filtering
             data = []
-            for i in range(len(df_)):
-                if not math.isnan(df_.iloc[i]["Buy_Signal_Price"]) or not math.isnan(df_.iloc[i]["Sell_Signal_Price"]):
-                    print(df_.index.date[i], df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"])
-                    data.append([df_.index.date[i], df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"]])
-            
-            good_data = []
-            # np.where to vectorizely calculate
-            '''
+            df_valid = df_[(df_['Buy_Signal_Price'].notna()) | (df_['Sell_Signal_Price'].notna())]
+            df_valid = df_valid[['Buy_Signal_Price','Sell_Signal_Price']] # keep 3 columns we want
+            data = df_valid.reset_index().values.tolist() # convert dataframe to list
             if math.isnan(data[0][1]):
                 del data[0]
             if math.isnan(data[-1][2]):
                 del data[-1]
 
+
+            # Concat buy + sell into one dataframe
+            data_arr = np.array(data)
             arr = np.arange(len(data))
-            #using vector to separate buy and sell, then we can use mysql to merge
-
-            Buy_data_arr=data[arr % 2 ==0]
-            Sell_data_arr=data[arr % 2 !==0]
-            good_data_arr = np.concatenate([But_data_arr,Sell_data_arr],axis=1)
-
+            Buy_data_arr=data_arr[arr % 2 ==0]
+            Sell_data_arr=data_arr[arr % 2 == 1]
+            good_data_arr = np.concatenate([Buy_data_arr,Sell_data_arr],axis=1)
             record_df = pd.DataFrame(good_data_arr, 
-                  columns =['Entry_Date', 'Entry_Price', 'Exit_Price', 'Exit_Date', "Percentage_Change", "Long/Short"]) 
-                  
-            #then print(record_df) and keep going
-            '''
-            # C_arr = np.asarray(C) to translate list to array
-            for i in range(len(data)):
-                if i != len(data) - 1 and not math.isnan(data[i][1]):
-                    pair = [data[i][0], data[i][1]]
-                    pair.append(data[i+1][2])
-                    pair.append(data[i+1][0])
-                    change = (data[i+1][2] - data[i][1])/data[i][1]
-                    pair.append(change)
-                    pair.append("Long")
-                    good_data.append(pair)
+                  columns =['Entry_Date', 'Entry_Price','Buy_data_nan', 'Exit_Date', 'Sell_data_nan', 'Exit_Price']) 
+            del record_df['Buy_data_nan']
+            del record_df['Sell_data_nan']
+
+            record_df['Entry_Date'] = pd.to_datetime(record_df['Entry_Date'], format='%Y%m%d')
+            record_df['Exit_Date'] = pd.to_datetime(record_df['Exit_Date'], format='%Y%m%d')
             
-            record_df = pd.DataFrame(good_data, 
-                  columns =['Entry_Date', 'Entry_Price', 'Exit_Price', 'Exit_Date', "Percentage_Change", "Long/Short"]) 
+            # helper for adding percentage change and long/short column into df
+            def percent_change(row):
+                return (row['Exit_Price'] - row['Entry_Price'])/row['Entry_Price']
+            def set_long_short(row):
+                return 'Long'
+            
+            record_df['Percentage_Change'] = record_df.apply (lambda row: percent_change(row), axis=1)
+            record_df['Long/Short'] = record_df.apply (lambda row: set_long_short(row), axis=1)
             print(record_df)
             record_df.to_csv('/Users/kev/Desktop/trade_record.csv', encoding = 'utf-8', sep = ',', header = True,
                       index = True)
@@ -128,10 +120,10 @@ def result():
             # Cummulative return
             cum_ret = 0
             #added by Jon, a vectorization way to get the sum
-            #ret_all_trade_arr = np.asarray(ret_all_trade)
-            #cum_ret_arr = ret_all_trade_arr.sum
-            for i in range(len(ret_all_trade)):
-                cum_ret += ret_all_trade[i]
+            ret_all_trade_arr = np.asarray(ret_all_trade)
+            cum_ret = np.sum(ret_all_trade_arr)
+            #for i in range(len(ret_all_trade)):
+            #    cum_ret += ret_all_trade[i]
             
             # Annual Return
             ann_ret = cum_ret/365*240
@@ -139,20 +131,13 @@ def result():
             # Win Percentage
             win = 0
             loss = 0
-            '''
-            win_arr = (ret_all_trade_arr > 0).sum()
-            loss_arr = (ret_all_trade_arr !> 0).sum()
             
-            '''
-            for i in range(len(ret_all_trade)):
-                if ret_all_trade[i] > 0:
-                    win+=1
-                else:
-                    loss+=1
-            win_percent = win/len(ret_all_trade)
+            win_arr = (ret_all_trade_arr > 0).sum()
+            loss_arr = (ret_all_trade_arr <= 0).sum()
+            win_percent = win_arr/len(ret_all_trade)
             
             # Win/Loss Ratio
-            win_loss_ratio = win/loss
+            win_loss_ratio = win_arr/loss_arr
             
             # Beta
             
@@ -166,7 +151,10 @@ def result():
             # Sharpe Ratio, default risk-free interest rate is 4%
             risk_free = 0.04
             excess_return = ann_ret - risk_free
-            sharpe = excess_return/ann_ret
+            if ann_ret != 0:
+                sharpe = excess_return/ann_ret
+            else:
+                sharpe = 0
             
             print(ret_all_trade)
             print("Cumulative Return: ", round(cum_ret,4))
