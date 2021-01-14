@@ -95,7 +95,7 @@ def result():
             for i in range(len(df_)):
                 if not math.isnan(df_.iloc[i]["Buy_Signal_Price"]) or not math.isnan(df_.iloc[i]["Sell_Signal_Price"]):
                     print(df_.index.date[i], df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"])
-                    data.append([df_.index.date[i].astype(int), df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"]])
+                    data.append([to_integer(df_.index.date[i]), df_.iloc[i]["Buy_Signal_Price"], df_.iloc[i]["Sell_Signal_Price"]])
             
             good_data = []
             # np.where to vectorizely calculate
