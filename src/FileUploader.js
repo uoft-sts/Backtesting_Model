@@ -5,7 +5,7 @@ import React from 'react'
 import Files from './FileHandler'
 import './style.css';
 
-class Demo extends React.Component {
+class FileUploader extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -89,4 +89,4 @@ class Demo extends React.Component {
   }
 }
 
-export default Demo;
+export default FileUploader;
