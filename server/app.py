@@ -18,7 +18,7 @@ import numpy as np
 matplotlib.use('Agg')
 
 UPLOAD_FOLDER = './data/'
-app = Flask(__name__, static_folder='./templates/static')
+app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/result', methods=['GET', 'POST'])
 def result():
@@ -176,7 +176,7 @@ def result():
         files = glob.glob(os.path.join(input_path, "*.csv"))
         for f in files:
             os.remove(f)
-    return render_template("dashboard.html", data=d)            
+    return render_template("./templates/dashboard.html", data=d)            
     return '''<h1>Underlying: {}</h1>
             <h1>Expiration Month: {}</h1>
             <h1>Method: {}</h1>
@@ -187,7 +187,7 @@ def result():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("../client/public/index.html")
 
 
 @app.route('/time')
