@@ -16,11 +16,12 @@ const Test: FunctionComponent<any> = (props) => {
   };
 
   return (
-    <Form noValidate validated={validatedForm} onSubmit={handleSubmit}>
+    <Form noValidate validated={validatedForm} onSubmit={handleSubmit} action="http://localhost:5000/result" method="POST">
       <Form.Group controlId="underlying">
         <Form.Label>Underlying:</Form.Label>
         <Form.Control
           type="text"
+          name="underlying"
           placeholder="Please enter underlying here"
           required
         />
@@ -32,7 +33,8 @@ const Test: FunctionComponent<any> = (props) => {
         <Form.Label>Expiration Month:</Form.Label>
         <Form.Control
           type="number"
-          placeholder="Please enter expriation month here"
+          name="expmonth"
+          placeholder="Please enter expiration month here"
           required
           isInvalid={monthCheck}
           onChange={(e: any) => {
@@ -49,9 +51,9 @@ const Test: FunctionComponent<any> = (props) => {
       </Form.Group>
       <Form.Group controlId="method">
         <Form.Label>Select a method:</Form.Label>
-        <Form.Control as="select" placeholder="Select a value:" required>
+        <Form.Control as="select" name="method" placeholder="Select a value:" required>
           <option>First Of Month</option>
-          <option>Last Of Month</option>
+          <option>Last Trading Day</option>
           <Form.Control.Feedback type="invalid">
             You must select a value.
           </Form.Control.Feedback>
@@ -63,6 +65,7 @@ const Test: FunctionComponent<any> = (props) => {
             <Form.Label>Select date:</Form.Label>
             <Form.Control
               type="date"
+              name="daterange_from"
               placeholder="Select a value:"
               required
             ></Form.Control>
@@ -73,15 +76,13 @@ const Test: FunctionComponent<any> = (props) => {
             <Form.Label>Select date:</Form.Label>
             <Form.Control
               type="date"
+              name="daterange_to"
               placeholder="Select a value:"
               required
             ></Form.Control>
           </Form.Group>
         </Col>
       </Row>
-      <Form.Group controlId="files">
-        <Form.File label="Select your file here" custom />
-      </Form.Group>
       <Button type="submit">Submit form</Button>
     </Form>
   );

@@ -5,8 +5,8 @@ const TopHeader: FunctionComponent<any> = () => {
   return (
     <Jumbotron fluid>
       <Container>
-        <h1>Welcome to STS</h1>
-        <p>WIP: we can add more text here...</p>
+        <h1>Welcome to Project Alpha</h1>
+        <p>Backtesting Engine</p>
         <p>
           <Button variant="primary">Learn more</Button>
         </p>
