@@ -3,6 +3,7 @@ from index_setter import set_index
 from werkzeug.utils import secure_filename
 from file_reader import File_Reader, Roll_Dates_First_Of_Month, Roll_Dates_Last_Trading_Day, Roll_Dates_Liquidity_Based
 from record import execution
+from ratios import Portfolio
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -29,9 +30,9 @@ def result():
     underlying = request.form.get('underlying')
     expmonth = request.form.get('expmonth')
     method = request.form.get('method')
-    input_path = '/Users/kev/Documents/GitHub/Backtesting_Model/server/data/'
-    output_path = '/Users/kev/Documents/GitHub/Backtesting_Model/server/data/'
-    output_csv_path = "/Users/kev/Desktop/sample.csv"
+    input_path = '~/dev/Backtesting_Model-test-ethan/server/data/'
+    output_path = '~/dev/Backtesting_Model-test-ethan/server/data/'
+    output_csv_path = "~/Desktop/sample.csv"
     #f_name = []
     
     #f = request.form.get('file')
@@ -116,48 +117,71 @@ def result():
     print(record_df)
     record_df.to_csv('/Users/kev/Desktop/trade_record.csv', encoding = 'utf-8', sep = ',', header = True,
                 index = True)
-    
+
     # Ratios
     ret_all_trade = record_df['Percentage_Change']
-    
+
+    # initiate Portfolio class
+    portfolio = Portfolio(ret_all_trade)
+
     # Cummulative return
-    cum_ret = 0
-    #added by Jon, a vectorization way to get the sum
-    ret_all_trade_arr = np.asarray(ret_all_trade)
-    cum_ret = np.sum(ret_all_trade_arr)
-    #for i in range(len(ret_all_trade)):
-    #    cum_ret += ret_all_trade[i]
-    
+    cum_ret = portfolio.compute_cumulative_return()
+
     # Annual Return
-    ann_ret = cum_ret/365*240
-    
+    ann_ret = portfolio.compute_annual_return(cum_ret)
+
     # Win Percentage
-    win = 0
-    loss = 0
-    
-    win_arr = (ret_all_trade_arr > 0).sum()
-    loss_arr = (ret_all_trade_arr <= 0).sum()
-    win_percent = win_arr/len(ret_all_trade)
-    
+    win_percent = portfolio.compute_win_percentage()
+
     # Win/Loss Ratio
-    win_loss_ratio = win_arr/loss_arr
-    
-    # Beta
+    win_loss_ratio = portfolio.compute_win_loss_ratio()
     
     # Volatility
-    n = len(ret_all_trade)
-    vol = np.std(ret_all_trade)*math.sqrt(n-1)/math.sqrt(n)
-    
+    vol = portfolio.compute_volatility()
+
     # Annual volatility
-    ann_vol = math.sqrt(252)*vol
-    
+    ann_vol = portfolio.compute_annual_volatility(vol)
+
     # Sharpe Ratio, default risk-free interest rate is 4%
-    risk_free = 0.04
-    excess_return = ann_ret - risk_free
-    if ann_ret != 0:
-        sharpe = excess_return/ann_ret
-    else:
-        sharpe = 0
+    sharpe = portfolio.compute_sharpe_ratio(ann_ret)
+
+    # Sortino Ratio
+    sortino = portfolio.compute_sortino_ratio(ann_ret)
+
+    # Max drawdown
+    max_drawdown = portfolio.compute_max_drawdown()
+
+    # Calmar Ratio
+    calmar_ratio = portfolio.compute_calmar_ratio(ann_ret, max_drawdown)
+
+    # Omega Ratio
+    # to be added
+
+    # Beta
+    beta = portfolio.compute_beta()
+
+    # Skew
+    skew = portfolio.compute_skew()
+
+    # Kurtosis
+    kurtosis = portfolio.compute_kurtosis()
+
+    # Tail Ratio
+    tail_ratio = portfolio.compute_tail_ratio(ann_ret)
+
+    # Var
+    # alpha?
+    var = portfolio.compute_var()
+
+    # Gross leverage
+    gross_leverage = portfolio.compute_gross_leverage()
+
+    # Alpha
+    # to be added
+
+    # Summarize Performance
+    # to be added
+
     
     print(ret_all_trade)
     print("Cumulative Return: ", round(cum_ret,4))
