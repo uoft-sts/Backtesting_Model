@@ -36,10 +36,17 @@ For Windows:
 Sets up the virtual environment (venv) and activates it\
 Note: you only need to run the second activate script for the second time and afterwards
 
-### `pip install flask python-dotenv`
+### `brew install ta-lib `
 
-Installs flask + python-dotenv package, then we are good to run
+Installs ta-lib package
 (Only need to install once)
+
+
+### `pip install flask python-dotenv pandas matplotlib numpy ta-lib`
+
+Installs all necessary packages, then we are good to run
+(Only need to install once)
+
 
 ### `flask run`
 
