@@ -2,7 +2,8 @@ from flask import Flask, request, redirect, render_template
 from index_setter import set_index
 from werkzeug.utils import secure_filename
 from file_reader import File_Reader, Roll_Dates_First_Of_Month, Roll_Dates_Last_Trading_Day, Roll_Dates_Liquidity_Based
-from record import execution
+from record import ema_execution, tema_execution, macd_execution
+from ratios import Portfolio
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
@@ -15,6 +16,8 @@ import glob
 import talib as ta
 import math
 import numpy as np
+import pandas_datareader as web
+
 matplotlib.use('Agg')
 
 UPLOAD_FOLDER = './data/'
@@ -29,9 +32,8 @@ def result():
     underlying = request.form.get('underlying')
     expmonth = request.form.get('expmonth')
     method = request.form.get('method')
-    input_path = '/Users/kev/Documents/GitHub/Backtesting_Model/server/data/'
-    output_path = '/Users/kev/Documents/GitHub/Backtesting_Model/server/data/'
-    output_csv_path = "/Users/kev/Desktop/sample.csv"
+    input_path = './data/'
+    output_csv_path = './sample.csv'
     #f_name = []
     
     #f = request.form.get('file')
@@ -39,7 +41,7 @@ def result():
     #f.save(secure_filename(f.filename))
     #f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))          
     #f_name.append(f.filename)
-    set_index(input_path, output_path)
+    set_index(input_path, input_path)
     if method == "First Of Month":
         a = Roll_Dates_First_Of_Month(underlying, expmonth, 
                         input_file_path = input_path,
@@ -57,29 +59,42 @@ def result():
     df_ = a.fit_transform(df)
     df_ = df_.loc[daterange_from:daterange_to]
     
+    # Strategy EMA
+    #EMA_short = ta.EMA(df_['close'], timeperiod = 5)
+    #EMA_long = ta.EMA(df_['close'], timeperiod = 10)
+    #df_['EMA_short'] = EMA_short
+    #df_['EMA_long'] = EMA_long
+
+    # TEMA
+    #TEMA_short = ta.TEMA(df_['close'], timeperiod = 20)
+    #TEMA_long = ta.TEMA(df_['close'], timeperiod = 50)
+    #df_['TEMA_short'] = TEMA_short
+    #df_['TEMA_long'] = TEMA_long
     
-    EMA_short = ta.EMA(df_['close'], timeperiod = 5)
-    EMA_long = ta.EMA(df_['close'], timeperiod = 20)
+    # MACD
+    shortEMA = df_.close.ewm(span = 12, adjust = False).mean()
+    longEMA = df_.close.ewm(span = 26, adjust = False).mean()
+    MACD = shortEMA - longEMA
+    signal = MACD.ewm(span=9, adjust = False).mean()
+
+    df_['MACD'] = MACD
+    df_['Signal_line'] = signal
     
-    df_['EMA_short'] = EMA_short
-    df_['EMA_long'] = EMA_long
-    
-    df_price = execution(df_)
+    df_price = macd_execution(df_)
     df_['Buy_Signal_Price'] = df_price[0]
     df_['Sell_Signal_Price'] = df_price[1]
-    
-    print(df_)
     
     fig = plt.figure(figsize = (15, 7))
     plt.scatter(df_.index, df_['Buy_Signal_Price'], color = 'green', label = 'Buy', marker = '^', alpha = 0.6)
     plt.scatter(df_.index, df_['Sell_Signal_Price'], color = 'red', label = 'Sell', marker = 'v', alpha = 0.6)
     plt.plot(df_['close'], label = 'close', alpha = 0.4)
-    plt.title('AAPL Chaikin A/D Oscillator Line')
+    plt.title('Backtesting')
     plt.legend(loc = 'best')
     plt.xlabel('Date')
-    plt.ylabel('ADOSC Value')
+    plt.ylabel('Price')
 
     fig.savefig('./static/temp.png', dpi=fig.dpi)
+    
     # Data Filtering
     data = []
     df_valid = df_[(df_['Buy_Signal_Price'].notna()) | (df_['Sell_Signal_Price'].notna())]
@@ -113,72 +128,31 @@ def result():
     
     record_df['Percentage_Change'] = record_df.apply (lambda row: percent_change(row), axis=1)
     record_df['Long/Short'] = record_df.apply (lambda row: set_long_short(row), axis=1)
+    record_df['P_L'] = record_df.Exit_Price.values - record_df.Entry_Price.values
     print(record_df)
-    record_df.to_csv('/Users/kev/Desktop/trade_record.csv', encoding = 'utf-8', sep = ',', header = True,
-                index = True)
-    
+    #record_df.to_csv(output_csv_path, encoding = 'utf-8', sep = ',', header = True,
+    #            index = True)
+
     # Ratios
-    ret_all_trade = record_df['Percentage_Change']
+
+    # initiate Portfolio class
+    portfolio = Portfolio(record_df, init_investment = 10000)
+
+    # market return
+    market = web.DataReader('SPY', data_source = 'yahoo', start = record_df.Entry_Date.iloc[0], end = record_df.Exit_Date.iloc[-1])
+    market_return = (market.Close.iloc[-1] - market.Close.iloc[0])/market.Close.iloc[0]
+    market_return = market_return.round(4)
     
-    # Cummulative return
-    cum_ret = 0
-    #added by Jon, a vectorization way to get the sum
-    ret_all_trade_arr = np.asarray(ret_all_trade)
-    cum_ret = np.sum(ret_all_trade_arr)
-    #for i in range(len(ret_all_trade)):
-    #    cum_ret += ret_all_trade[i]
-    
-    # Annual Return
-    ann_ret = cum_ret/365*240
-    
-    # Win Percentage
-    win = 0
-    loss = 0
-    
-    win_arr = (ret_all_trade_arr > 0).sum()
-    loss_arr = (ret_all_trade_arr <= 0).sum()
-    win_percent = win_arr/len(ret_all_trade)
-    
-    # Win/Loss Ratio
-    win_loss_ratio = win_arr/loss_arr
-    
-    # Beta
-    
-    # Volatility
-    n = len(ret_all_trade)
-    vol = np.std(ret_all_trade)*math.sqrt(n-1)/math.sqrt(n)
-    
-    # Annual volatility
-    ann_vol = math.sqrt(252)*vol
-    
-    # Sharpe Ratio, default risk-free interest rate is 4%
-    risk_free = 0.04
-    excess_return = ann_ret - risk_free
-    if ann_ret != 0:
-        sharpe = excess_return/ann_ret
-    else:
-        sharpe = 0
-    
-    print(ret_all_trade)
-    print("Cumulative Return: ", round(cum_ret,4))
-    print("Annual Return: ", round(ann_ret, 4))
-    print("Win Percentage: ", win_percent)
-    print("Win Loss Ratio: ", win_loss_ratio)
-    print("Volatility", round(vol, 4))
-    print("Annual Volatility: ", round(ann_vol, 4))
-    print("Sharpe Ratio: ", round(sharpe, 4))
-    d=[]
-    d.append(["Cumulative Return", round(cum_ret,4)])
-    d.append(["Annual Return", round(ann_ret, 4)])
-    d.append(["Win Percentage", win_percent])
-    d.append(["Win Loss Ratio", win_loss_ratio])
-    d.append(["Volatility", round(vol, 4)])
-    d.append(["Annual Volatility", round(ann_vol, 4)])
-    d.append(["Sharpe Ratio", round(sharpe, 4)])
+    # Summarize Performance
+    performance_summ = portfolio.summarize_performance(market_return, 0.5)
+
+    data = []
+    for key in performance_summ:
+        data.append([key, performance_summ[key]])
     #files = glob.glob(os.path.join(input_path, "*.csv"))
     #for f in files:
     #    os.remove(f)
-    return render_template("dashboard.html", data=d)            
+    return render_template("dashboard.html", data=data)            
     #return '''<h1>Underlying: {}</h1>
     #        <h1>Expiration Month: {}</h1>
     #        <h1>Method: {}</h1>
