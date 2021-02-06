@@ -1,5 +1,10 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,100);
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   background-color: #DFDFDF;
   font-family: "Roboto", helvetica, arial, sans-serif;
@@ -38,12 +43,12 @@ div.table-title {
 /*** Table Styles **/
 
 .table-fill {
+  overflow-y: auto;
   background: white;
   border-radius:3px;
   border-collapse: collapse;
   height: 320px;
   margin: auto;
-  max-width: 600px;
   padding:5px;
   width: 100%;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
@@ -120,6 +125,7 @@ td {
   font-size:18px;
   text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.1);
   border-right: 1px solid #C1C3D1;
+  width:50%;
 }
 
 td:last-child {
@@ -138,32 +144,15 @@ th.text-right {
   text-align: right;
 }
 
-td.text-left {
-  text-align: left;
-}
-
-td.text-center {
-  text-align: center;
-}
-
-td.text-right {
-  text-align: right;
-}
-
 #main{
     width:100%;
      margin : 0;
   }
 
   #d1{
-    width:50%;
+    width:70%;
     margin : 0;
     float : left ;
   }
-  
-  #d2{
-    width:50%;
-margin : 0;
-float : left ;
-  }
+
 
