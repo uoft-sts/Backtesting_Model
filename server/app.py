@@ -17,6 +17,7 @@ import talib as ta
 import math
 import numpy as np
 import pandas_datareader as web
+from applyStrategy import performance_result
 
 matplotlib.use('Agg')
 
@@ -79,76 +80,101 @@ def result():
 
     df_['MACD'] = MACD
     df_['Signal_line'] = signal
+
+    df_price_ema = ema_execution(df_)
+    performance_summ_ema = performance_result(df_, df_price_ema)
+
+    df_price_tema = tema_execution(df_)
+    performance_summ_tema = performance_result(df_, df_price_tema)
+
+    df_price_macd = macd_execution(df_)
+    performance_summ_macd = performance_result(df_, df_price_macd)
+
+
+
+
+
+    # df_['Buy_Signal_Price'] = df_price[0]
+    # df_['Sell_Signal_Price'] = df_price[1]
     
-    df_price = macd_execution(df_)
-    df_['Buy_Signal_Price'] = df_price[0]
-    df_['Sell_Signal_Price'] = df_price[1]
+    # fig = plt.figure(figsize = (15, 7))
+    # plt.scatter(df_.index, df_['Buy_Signal_Price'], color = 'green', label = 'Buy', marker = '^', alpha = 0.6)
+    # plt.scatter(df_.index, df_['Sell_Signal_Price'], color = 'red', label = 'Sell', marker = 'v', alpha = 0.6)
+    # plt.plot(df_['close'], label = 'close', alpha = 0.4)
+    # plt.title('Backtesting')
+    # plt.legend(loc = 'best')
+    # plt.xlabel('Date')
+    # plt.ylabel('Price')
+
+    # fig.savefig('./static/temp.png', dpi=fig.dpi)
     
-    fig = plt.figure(figsize = (15, 7))
-    plt.scatter(df_.index, df_['Buy_Signal_Price'], color = 'green', label = 'Buy', marker = '^', alpha = 0.6)
-    plt.scatter(df_.index, df_['Sell_Signal_Price'], color = 'red', label = 'Sell', marker = 'v', alpha = 0.6)
-    plt.plot(df_['close'], label = 'close', alpha = 0.4)
-    plt.title('Backtesting')
-    plt.legend(loc = 'best')
-    plt.xlabel('Date')
-    plt.ylabel('Price')
+    # # Data Filtering
+    # data = []
+    # df_valid = df_[(df_['Buy_Signal_Price'].notna()) | (df_['Sell_Signal_Price'].notna())]
+    # df_valid = df_valid[['Buy_Signal_Price','Sell_Signal_Price']] # keep 3 columns we want
+    # data = df_valid.reset_index().values.tolist() # convert dataframe to list
+    # if math.isnan(data[0][1]):
+    #     del data[0]
+    # if math.isnan(data[-1][2]):
+    #     del data[-1]
 
-    fig.savefig('./static/temp.png', dpi=fig.dpi)
+
+    # # Concat buy + sell into one dataframe
+    # data_arr = np.array(data)
+    # arr = np.arange(len(data))
+    # Buy_data_arr=data_arr[arr % 2 ==0]
+    # Sell_data_arr=data_arr[arr % 2 == 1]
+    # good_data_arr = np.concatenate([Buy_data_arr,Sell_data_arr],axis=1)
+    # record_df = pd.DataFrame(good_data_arr, 
+    #         columns =['Entry_Date', 'Entry_Price','Buy_data_nan', 'Exit_Date', 'Sell_data_nan', 'Exit_Price']) 
+    # del record_df['Buy_data_nan']
+    # del record_df['Sell_data_nan']
+
+    # record_df['Entry_Date'] = pd.to_datetime(record_df['Entry_Date'], format='%Y%m%d')
+    # record_df['Exit_Date'] = pd.to_datetime(record_df['Exit_Date'], format='%Y%m%d')
     
-    # Data Filtering
-    data = []
-    df_valid = df_[(df_['Buy_Signal_Price'].notna()) | (df_['Sell_Signal_Price'].notna())]
-    df_valid = df_valid[['Buy_Signal_Price','Sell_Signal_Price']] # keep 3 columns we want
-    data = df_valid.reset_index().values.tolist() # convert dataframe to list
-    if math.isnan(data[0][1]):
-        del data[0]
-    if math.isnan(data[-1][2]):
-        del data[-1]
-
-
-    # Concat buy + sell into one dataframe
-    data_arr = np.array(data)
-    arr = np.arange(len(data))
-    Buy_data_arr=data_arr[arr % 2 ==0]
-    Sell_data_arr=data_arr[arr % 2 == 1]
-    good_data_arr = np.concatenate([Buy_data_arr,Sell_data_arr],axis=1)
-    record_df = pd.DataFrame(good_data_arr, 
-            columns =['Entry_Date', 'Entry_Price','Buy_data_nan', 'Exit_Date', 'Sell_data_nan', 'Exit_Price']) 
-    del record_df['Buy_data_nan']
-    del record_df['Sell_data_nan']
-
-    record_df['Entry_Date'] = pd.to_datetime(record_df['Entry_Date'], format='%Y%m%d')
-    record_df['Exit_Date'] = pd.to_datetime(record_df['Exit_Date'], format='%Y%m%d')
+    # # helper for adding percentage change and long/short column into df
+    # def percent_change(row):
+    #     return (row['Exit_Price'] - row['Entry_Price'])/row['Entry_Price']
+    # def set_long_short(row):
+    #     return 'Long'
     
-    # helper for adding percentage change and long/short column into df
-    def percent_change(row):
-        return (row['Exit_Price'] - row['Entry_Price'])/row['Entry_Price']
-    def set_long_short(row):
-        return 'Long'
-    
-    record_df['Percentage_Change'] = record_df.apply (lambda row: percent_change(row), axis=1)
-    record_df['Long/Short'] = record_df.apply (lambda row: set_long_short(row), axis=1)
-    record_df['P_L'] = record_df.Exit_Price.values - record_df.Entry_Price.values
-    print(record_df)
-    #record_df.to_csv(output_csv_path, encoding = 'utf-8', sep = ',', header = True,
-    #            index = True)
+    # record_df['Percentage_Change'] = record_df.apply (lambda row: percent_change(row), axis=1)
+    # record_df['Long/Short'] = record_df.apply (lambda row: set_long_short(row), axis=1)
+    # record_df['P_L'] = record_df.Exit_Price.values - record_df.Entry_Price.values
+    # print(record_df)
+    # #record_df.to_csv(output_csv_path, encoding = 'utf-8', sep = ',', header = True,
+    # #            index = True)
 
-    # Ratios
+    # # Ratios
 
-    # initiate Portfolio class
-    portfolio = Portfolio(record_df, init_investment = 10000)
+    # # initiate Portfolio class
+    # portfolio = Portfolio(record_df, init_investment = 10000)
 
-    # market return
-    market = web.DataReader('SPY', data_source = 'yahoo', start = record_df.Entry_Date.iloc[0], end = record_df.Exit_Date.iloc[-1])
-    market_return = (market.Close.iloc[-1] - market.Close.iloc[0])/market.Close.iloc[0]
-    market_return = market_return.round(4)
+    # # market return
+    # market = web.DataReader('SPY', data_source = 'yahoo', start = record_df.Entry_Date.iloc[0], end = record_df.Exit_Date.iloc[-1])
+    # market_return = (market.Close.iloc[-1] - market.Close.iloc[0])/market.Close.iloc[0]
+    # market_return = market_return.round(4)
     
     # Summarize Performance
-    performance_summ = portfolio.summarize_performance(market_return, 0.5)
+    #performance_summ = portfolio.summarize_performance(market_return, 0.5)
 
     data = []
-    for key in performance_summ:
-        data.append([key, performance_summ[key]])
+    data.append('ID#','strategy-1', 'EMA')
+    for key in performance_summ_ema:
+        idnum = 1
+        data.append([idnum, key, performance_summ_ema[key]])
+        idnum = idnum + 1
+    data.append('strategy-2', 'TEMA')
+    for key in performance_summ_tema:
+        idnum = 1
+        data.append([idnum, key, performance_summ_tema[key]])
+        idnum = idnum + 1
+    data.append('strategy-3', 'MACD')
+    for key in performance_summ_macd:
+        idnum = 1
+        data.append([idnum, key, performance_summ_macd[key]])
+        idnum = idnum + 1
     #files = glob.glob(os.path.join(input_path, "*.csv"))
     #for f in files:
     #    os.remove(f)
