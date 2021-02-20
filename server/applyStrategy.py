@@ -18,7 +18,10 @@ import math
 import numpy as np
 import pandas_datareader as web
 
-def performance_result(df_, df_price):
+def performance_result(df_, df_price,strategy_name):
+    ##前台传入的strategy name必须是要和对应strategy函数名相同
+    
+
     df_['Buy_Signal_Price'] = df_price[0]
     df_['Sell_Signal_Price'] = df_price[1]
     
@@ -31,7 +34,8 @@ def performance_result(df_, df_price):
     plt.xlabel('Date')
     plt.ylabel('Price')
 
-    fig.savefig('./static/temp.png', dpi=fig.dpi)
+    
+    fig.savefig('./static/' + strategy_name + '.png', dpi=fig.dpi)
     
     # Data Filtering
     data = []

@@ -17,7 +17,8 @@ import talib as ta
 import math
 import numpy as np
 import pandas_datareader as web
-from applyStrategy import performance_result
+from applyStrategy import *
+
 
 matplotlib.use('Agg')
 
@@ -61,16 +62,16 @@ def result():
     df_ = df_.loc[daterange_from:daterange_to]
     
     # Strategy EMA
-    #EMA_short = ta.EMA(df_['close'], timeperiod = 5)
-    #EMA_long = ta.EMA(df_['close'], timeperiod = 10)
-    #df_['EMA_short'] = EMA_short
-    #df_['EMA_long'] = EMA_long
+    EMA_short = ta.EMA(df_['close'], timeperiod = 5)
+    EMA_long = ta.EMA(df_['close'], timeperiod = 10)
+    df_['EMA_short'] = EMA_short
+    df_['EMA_long'] = EMA_long
 
     # TEMA
-    #TEMA_short = ta.TEMA(df_['close'], timeperiod = 20)
-    #TEMA_long = ta.TEMA(df_['close'], timeperiod = 50)
-    #df_['TEMA_short'] = TEMA_short
-    #df_['TEMA_long'] = TEMA_long
+    TEMA_short = ta.TEMA(df_['close'], timeperiod = 20)
+    TEMA_long = ta.TEMA(df_['close'], timeperiod = 50)
+    df_['TEMA_short'] = TEMA_short
+    df_['TEMA_long'] = TEMA_long
     
     # MACD
     shortEMA = df_.close.ewm(span = 12, adjust = False).mean()
