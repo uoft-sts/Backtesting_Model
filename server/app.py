@@ -15,9 +15,8 @@ import logging
 import glob
 import talib as ta
 import math
-import numpy as np
 import pandas_datareader as web
-from applyStrategy import *
+from apply_strategy import *
 
 
 matplotlib.use('Agg')
@@ -83,13 +82,13 @@ def result():
     df_['Signal_line'] = signal
 
     df_price_ema = ema_execution(df_)
-    performance_summ_ema = performance_result(df_, df_price_ema)
+    performance_summ_ema = performance_result(df_, df_price_ema,'EMA')
 
     df_price_tema = tema_execution(df_)
-    performance_summ_tema = performance_result(df_, df_price_tema)
+    performance_summ_tema = performance_result(df_, df_price_tema,'TEMA')
 
     df_price_macd = macd_execution(df_)
-    performance_summ_macd = performance_result(df_, df_price_macd)
+    performance_summ_macd = performance_result(df_, df_price_macd,'MACD')
 
 
 
@@ -160,22 +159,32 @@ def result():
     # Summarize Performance
     #performance_summ = portfolio.summarize_performance(market_return, 0.5)
 
-    data = []
-    data.append('ID#','strategy-1', 'EMA')
-    for key in performance_summ_ema:
-        idnum = 1
-        data.append([idnum, key, performance_summ_ema[key]])
-        idnum = idnum + 1
-    data.append('strategy-2', 'TEMA')
-    for key in performance_summ_tema:
-        idnum = 1
-        data.append([idnum, key, performance_summ_tema[key]])
-        idnum = idnum + 1
-    data.append('strategy-3', 'MACD')
-    for key in performance_summ_macd:
-        idnum = 1
-        data.append([idnum, key, performance_summ_macd[key]])
-        idnum = idnum + 1
+
+
+
+    # stra_1的结果： 
+# "ema":{"ratio1":321;"ratio2":2}
+
+    data = {}
+    data["EMA"] = performance_summ_ema
+    data["TEMA"] = performance_summ_tema
+    data["MACD"] = performance_summ_macd
+    print(data)
+    # data.append('ID#','strategy-1', 'EMA')
+    # for key in performance_summ_ema:    
+    #     idnum = 1
+    #     data.append([idnum, key, performance_summ_ema[key]])
+    #     idnum = idnum + 1
+    # data.append('strategy-2', 'TEMA')
+    # for key in performance_summ_tema:
+    #     idnum = 1
+    #     data.append([idnum, key, performance_summ_tema[key]])
+    #     idnum = idnum + 1
+    # data.append('strategy-3', 'MACD')
+    # for key in performance_summ_macd:
+    #     idnum = 1
+    #     data.append([idnum, key, performance_summ_macd[key]])
+    #     idnum = idnum + 1
     #files = glob.glob(os.path.join(input_path, "*.csv"))
     #for f in files:
     #    os.remove(f)
