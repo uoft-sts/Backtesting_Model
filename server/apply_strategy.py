@@ -76,5 +76,3 @@ def performance_result(df_, df_price, strategy_name):
     performance_summ = portfolio.summarize_performance(market_return, 0.5)
 
     return performance_summ
-
-
