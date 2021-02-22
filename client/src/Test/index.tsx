@@ -59,14 +59,6 @@ const Test: FunctionComponent<any> = (props) => {
   };
   return (
     <div>
-      <Button
-        variant="outline-primary"
-        onClick={() => {
-          setShowButton(!showbutton);
-        }}
-      >
-        {showbutton ? "Hide Input Form" : "Show Input Form"}
-      </Button>
       {showbutton ? (
         <Form noValidate validated={validatedForm} onSubmit={handleSubmit}>
           <Form.Group controlId="underlying">
@@ -163,6 +155,14 @@ const Test: FunctionComponent<any> = (props) => {
       ) : (
         <></>
       )}
+      <Button
+        variant="outline-primary"
+        onClick={() => {
+          setShowButton(!showbutton);
+        }}
+      >
+        {showbutton ? "Hide Input Form" : "Show Input Form"}
+      </Button>
       <Table striped bordered hover>
         <thead>
           <tr>{tableHeader}</tr>
