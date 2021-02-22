@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template 
+from flask import Flask, request, redirect, render_template, jsonify, json
 from index_setter import set_index
 from werkzeug.utils import secure_filename
 from file_reader import File_Reader, Roll_Dates_First_Of_Month, Roll_Dates_Last_Trading_Day, Roll_Dates_Liquidity_Based
@@ -16,23 +16,27 @@ import glob
 import talib as ta
 import math
 import pandas_datareader as web
+from flask_cors import CORS
 from apply_strategy import *
-
 
 matplotlib.use('Agg')
 
 UPLOAD_FOLDER = './data/'
-template_dir = os.path.abspath('../client/templates')
-app = Flask(__name__, template_folder=template_dir)
+app = Flask(__name__)
+CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-@app.route('/result', methods=['GET', 'POST'])
+app.config['CORS_HEADERS'] = 'Content-Type'
+@app.route('/result/', methods=['POST'])
 def result():
-    daterange_from = request.form.get('daterange_from')
-    daterange_to = request.form.get('daterange_to')
-    underlying = request.form.get('underlying')
-    expmonth = request.form.get('expmonth')
-    method = request.form.get('method')
+    content = request.values
+    daterange_from = content['daterange_from']
+    daterange_to = content['daterange_to']
+    underlying = content['underlying']
+    expmonth = content['expMonth']
+    methods = content['methods']
+
     input_path = './data/'
+    output_path = './data/'
     output_csv_path = './sample.csv'
     #f_name = []
     
@@ -41,16 +45,17 @@ def result():
     #f.save(secure_filename(f.filename))
     #f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))          
     #f_name.append(f.filename)
-    set_index(input_path, input_path)
-    if method == "First Of Month":
+
+    set_index(input_path, output_path)
+    if methods == "First Of Month":
         a = Roll_Dates_First_Of_Month(underlying, expmonth, 
                         input_file_path = input_path,
                         output_file_path = output_csv_path)
-    elif method == "Last Trading Day":
+    elif methods == "Last Trading Day":
         a = Roll_Dates_Last_Trading_Day(underlying, expmonth, 
                         input_file_path = input_path,
                         output_file_path = output_csv_path)
-    elif method == "Liquidity Based":
+    elif methods == "Liquidity Based":
         a = Roll_Dates_Liquidity_Based(underlying, expmonth, 
                         input_file_path = input_path,
                         output_file_path = output_csv_path)
@@ -95,11 +100,7 @@ def result():
     data["TEMA"] = performance_summ_tema
     data["MACD"] = performance_summ_macd
     print(data)
-
-    #files = glob.glob(os.path.join(input_path, "*.csv"))
-    #for f in files:
-    #    os.remove(f)
-    return render_template("dashboard.html", data=data)            
+    return data           
 
 @app.route("/")
 def index():
