@@ -22,7 +22,7 @@ def performance_result(df_, df_price, strategy_name):
     plt.ylabel('Price')
 
     
-    fig.savefig('./static/' + strategy_name + '.png', dpi=fig.dpi)
+    fig.savefig('../client/src/graph/' + strategy_name + '.png', dpi=fig.dpi)
     
     # Data Filtering
     data = []
