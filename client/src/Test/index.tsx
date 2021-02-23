@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Form, Button, Row, Col, Table } from "react-bootstrap";
+import { Form, Button, Row, Col, Table, Image } from "react-bootstrap";
 import axios from "axios";
+import graph from '../graph/EMA.png';
 
 type submitDataType = {
   underlying: string;
@@ -25,6 +26,7 @@ const Test: FunctionComponent<any> = (props) => {
   const [tableHeader, setTableHeader] = useState<any>(<></>);
   const [tableRows, setTableRows] = useState<any>(<></>);
   const [showbutton, setShowButton] = useState<boolean>(true);
+  const [showGraph, setShowGraph] = useState<boolean>(false);
 
   const handleSubmit = (e: any) => {
     const form = e.currentTarget;
@@ -44,6 +46,7 @@ const Test: FunctionComponent<any> = (props) => {
       })
         .then((response) => {
           setShowButton(!showbutton);
+          setShowGraph(true);
           console.log(response.data);
           let tempHeader = Object.keys(response.data).map((d) => <th>{d}</th>);
           let tempRows = Object.keys(response.data).map((d) => (
@@ -163,7 +166,7 @@ const Test: FunctionComponent<any> = (props) => {
       >
         {showbutton ? "Hide Input Form" : "Show Input Form"}
       </Button>
-      <Table striped bordered hover>
+      <Table striped bordered hover responsive>
         <thead>
           <tr>{tableHeader}</tr>
         </thead>
@@ -171,6 +174,11 @@ const Test: FunctionComponent<any> = (props) => {
           <tr>{tableRows}</tr>
         </tbody>
       </Table>
+      {showGraph ? (
+        <Image src={graph} alt="graph" fluid/>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
