@@ -7,9 +7,6 @@ const TopHeader: FunctionComponent<any> = () => {
       <Container>
         <h1>Welcome to Project Alpha</h1>
         <p>Backtesting Engine</p>
-        <p>
-          <Button variant="primary">Learn more</Button>
-        </p>
       </Container>
     </Jumbotron>
   );
