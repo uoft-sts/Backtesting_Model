@@ -78,6 +78,7 @@ const Test: FunctionComponent<any> = (props) => {
     MACD: emptyRatio
   });
   const [graphType, setGraphType] = useState<string>("");
+  const [dropdownValue, setDropdownValue] = useState<string>("Select Strategy");
 
   const handleSubmit = (e: any) => {
     const form = e.currentTarget;
@@ -238,7 +239,7 @@ const Test: FunctionComponent<any> = (props) => {
               </Form.Group>
             </Col>
           </Row>
-          <Button type="submit">Submit form</Button>
+          <Button type="submit" className="btn-block mt-2">Submit form</Button>
         </Form>
       ) : (
         <></>
@@ -248,14 +249,19 @@ const Test: FunctionComponent<any> = (props) => {
         onClick={() => {
           setShowButton(!showbutton);
         }}
+        className="btn-block p-0 mt-3"
       >
         {showbutton ? "Hide Input Form" : "Show Input Form"}
       </Button>
       { showDropdownButton ? (
-        <DropdownButton id="dropdown-basic-button" title="Select Strategy" onSelect={handleSelect}>
-          <Dropdown.Item eventKey="EMA">EMA</Dropdown.Item>
-          <Dropdown.Item eventKey="TEMA">TEMA</Dropdown.Item>
-          <Dropdown.Item eventKey="MACD">MACD</Dropdown.Item>
+        <DropdownButton 
+        id="dropdown-basic-button" 
+        title={dropdownValue}
+        onSelect={handleSelect}
+        className="mt-4 mb-4">
+          <Dropdown.Item eventKey="EMA" onClick={() => setDropdownValue("EMA")}>EMA</Dropdown.Item>
+          <Dropdown.Item eventKey="TEMA" onClick={() => setDropdownValue("TEMA")}>TEMA</Dropdown.Item>
+          <Dropdown.Item eventKey="MACD" onClick={() => setDropdownValue("MACD")}>MACD</Dropdown.Item>
         </DropdownButton>
       ) : (
         <></>
