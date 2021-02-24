@@ -1,7 +1,9 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { Form, Button, Row, Col, Table, Image } from "react-bootstrap";
+import { Form, Button, Row, Col, Table, Image, DropdownButton, Dropdown } from "react-bootstrap";
 import axios from "axios";
-import graph from '../graph/EMA.png';
+import EMAGraph from "../graph/EMA.png"
+import TEMAGraph from "../graph/TEMA.png"
+import MACDGraph from "../graph/MACD.png"
 
 type submitDataType = {
   underlying: string;
@@ -9,6 +11,30 @@ type submitDataType = {
   methods: string;
   daterange_from: string;
   daterange_to: string;
+};
+
+type ratioDataType = {
+  "Cumulative Return": number;
+  "Annual return": number;
+  "Win percentage": number;
+  "Win loss ratio": number | string;
+  "Volatility": number;
+  "Annual volatility": number;
+  "Sharpe ratio": number | string;
+  "Sortino ratio": number | string;
+  "Max drawdown": number;
+  "Calmar ratio": number | string;
+  "Omega ratio": number | string;
+  "Skew": number;
+  "Kurtosis": number;
+  "Tail ratio": number;
+  "VAR": number;
+};
+
+type responseDataType = {
+  "EMA": ratioDataType;
+  "TEMA": ratioDataType;
+  "MACD": ratioDataType;
 };
 
 const Test: FunctionComponent<any> = (props) => {
@@ -20,6 +46,24 @@ const Test: FunctionComponent<any> = (props) => {
     daterange_to: "",
   };
 
+  const emptyRatio: ratioDataType = {
+    "Cumulative Return": 0,
+    "Annual return": 0,
+    "Win percentage": 0,
+    "Win loss ratio": 1,
+    Volatility: 0,
+    "Annual volatility": 0,
+    "Sharpe ratio": 0,
+    "Sortino ratio": 0,
+    "Max drawdown": 0,
+    "Calmar ratio": 0,
+    "Omega ratio": 0,
+    Skew: 0,
+    Kurtosis: 0,
+    "Tail ratio": 0,
+    VAR: 0
+  };
+
   const [validatedForm, setValidatedForm] = useState<boolean>(false);
   const [monthCheck, setMonthCheck] = useState<boolean>(false);
   const [formData, setFormData] = useState<submitDataType>(emptyData);
@@ -27,6 +71,13 @@ const Test: FunctionComponent<any> = (props) => {
   const [tableRows, setTableRows] = useState<any>(<></>);
   const [showbutton, setShowButton] = useState<boolean>(true);
   const [showGraph, setShowGraph] = useState<boolean>(false);
+  const [showDropdownButton, setShowDropdownButton] = useState<boolean>(false);
+  const [resData, setResData] = useState<responseDataType>({
+    EMA: emptyRatio,
+    TEMA: emptyRatio,
+    MACD: emptyRatio
+  });
+  const [graphType, setGraphType] = useState<string>("");
 
   const handleSubmit = (e: any) => {
     const form = e.currentTarget;
@@ -47,11 +98,13 @@ const Test: FunctionComponent<any> = (props) => {
         .then((response) => {
           setShowButton(!showbutton);
           setShowGraph(true);
-          console.log(response.data);
-          let tempHeader = Object.keys(response.data).map((d) => <th>{d}</th>);
-          let tempRows = Object.keys(response.data).map((d) => (
-            <td>{response.data[d]}</td>
+          setShowDropdownButton(true);
+          let tempHeader = Object.keys(response.data['EMA']).map((d) => <th>{d}</th>);
+          let tempRows = Object.keys(response.data['EMA']).map((d) => (
+            <td>{response.data['EMA'][d]}</td>
           ));
+          setGraphType("EMA");
+          setResData(response.data);
           setTableHeader(tempHeader);
           setTableRows(tempRows);
         })
@@ -60,6 +113,38 @@ const Test: FunctionComponent<any> = (props) => {
         });
     }
   };
+
+  const handleSelect=(e:string | null)=>{
+    console.log(e)
+    var tempHeader;
+    var tempRows;
+    if(e === "EMA"){
+      tempHeader = Object.keys(resData['EMA']).map((d) => <th>{d}</th>);
+      tempRows = Object.keys(resData['EMA']).map((d) => (
+        <td>{(resData['EMA'] as any)[d]}</td>
+      ));
+      setGraphType("EMA");
+      console.log(graphType);
+    }
+    else if(e === "TEMA"){
+      tempHeader = Object.keys(resData['TEMA']).map((d) => <th>{d}</th>);
+      tempRows = Object.keys(resData['TEMA']).map((d) => (
+        <td>{(resData['TEMA'] as any)[d]}</td>
+      ));
+      setGraphType("TEMA");
+      console.log(graphType);
+    } else {
+      tempHeader = Object.keys(resData['MACD']).map((d) => <th>{d}</th>);
+      tempRows = Object.keys(resData['MACD']).map((d) => (
+        <td>{(resData['MACD'] as any)[d]}</td>
+      ));
+      setGraphType("MACD");
+      console.log(graphType);
+    }
+    setTableHeader(tempHeader);
+    setTableRows(tempRows);
+  }
+
   return (
     <div>
       {showbutton ? (
@@ -166,6 +251,16 @@ const Test: FunctionComponent<any> = (props) => {
       >
         {showbutton ? "Hide Input Form" : "Show Input Form"}
       </Button>
+      { showDropdownButton ? (
+        <DropdownButton id="dropdown-basic-button" title="Select Strategy" onSelect={handleSelect}>
+          <Dropdown.Item eventKey="EMA">EMA</Dropdown.Item>
+          <Dropdown.Item eventKey="TEMA">TEMA</Dropdown.Item>
+          <Dropdown.Item eventKey="MACD">MACD</Dropdown.Item>
+        </DropdownButton>
+      ) : (
+        <></>
+      )}
+      
       <Table striped bordered hover responsive>
         <thead>
           <tr>{tableHeader}</tr>
@@ -174,11 +269,22 @@ const Test: FunctionComponent<any> = (props) => {
           <tr>{tableRows}</tr>
         </tbody>
       </Table>
-      {showGraph ? (
-        <Image src={graph} alt="graph" fluid/>
-      ) : (
-        <></>
-      )}
+      {(function() {
+        if(showGraph) {
+          if (graphType === "EMA") {
+            console.log("here at ema");
+            return <Image src={EMAGraph} key={Date.now()} onLoad={() => console.log("loaded at ema")} fluid/>;
+          } else if (graphType === "TEMA") {
+            console.log("here at tema");
+            return <Image src={TEMAGraph} key={Date.now()} onLoad={() => console.log("loaded at tema")} fluid/>;
+          } else {
+            console.log("here at macd");
+            return <Image src={MACDGraph} key={Date.now()} onLoad={() => console.log("loaded at macd")}  fluid/>
+          }
+        } else {
+          return <></>;
+        }    
+      })()}
     </div>
   );
 };
