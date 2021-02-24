@@ -100,7 +100,7 @@ def result():
     data["TEMA"] = performance_summ_tema
     data["MACD"] = performance_summ_macd
     #print(data)
-    return data["EMA"]           
+    return data           
 
 @app.route("/")
 def index():
