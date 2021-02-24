@@ -18,6 +18,7 @@ import math
 import pandas_datareader as web
 from flask_cors import CORS
 from apply_strategy import *
+import datetime as dt
 
 matplotlib.use('Agg')
 
@@ -60,9 +61,13 @@ def result():
                         input_file_path = input_path,
                         output_file_path = output_csv_path)
     df = a.expiration_filter()
-    #print(df)
     df_ = a.fit_transform(df)
     df_ = df_.loc[daterange_from:daterange_to]
+    
+    df_["time"] = df_.index
+    df_['time'] = pd.to_datetime(df_['time'])
+    df_ohlc = df_[["time", "open", "high", "low", "close"]]
+    list_ohlc = df_ohlc.values.tolist()
     
     # Strategy EMA
     EMA_short = ta.EMA(df_['close'], timeperiod = 5)
@@ -99,6 +104,7 @@ def result():
     data["EMA"] = performance_summ_ema
     data["TEMA"] = performance_summ_tema
     data["MACD"] = performance_summ_macd
+    data["OHLC"] = list_ohlc
     #print(data)
     return data           
 

@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Form, Button, Row, Col, Table, Image, DropdownButton, Dropdown } from "react-bootstrap";
 import axios from "axios";
+import Chart from "react-apexcharts";
 import EMAGraph from "../graph/EMA.png"
 import TEMAGraph from "../graph/TEMA.png"
 import MACDGraph from "../graph/MACD.png"
@@ -37,6 +38,52 @@ type responseDataType = {
   "MACD": ratioDataType;
 };
 
+// Data Type for candlestick
+type optionsDataType = {
+  chart: chartDataType;
+  title: titleDataType;
+  xaxis: xaxisDataType;
+  yaxis: yaxisDataType;
+  tooltip: tooltipDataType;
+};
+
+type chartDataType = {
+  id?: string;
+  type?: string;
+  height?: number;
+};
+
+type titleDataType = {
+  text?: string;
+  align?: string;
+};
+
+type xaxisDataType = {
+  categories?: number[];
+  type?: string;
+  labels?: labelDataType;
+};
+
+type labelDataType = {
+  format?: string;
+}
+
+type yaxisDataType = {
+  tooltip?: tooltipDataType;
+};
+
+type tooltipDataType = {
+  enabled?: boolean;
+  x?: labelDataType;
+  y?: labelDataType;
+}
+
+type seriesDataType = {
+  name: string;
+  data: number[] | number[][];
+};
+
+
 const Test: FunctionComponent<any> = (props) => {
   const emptyData: submitDataType = {
     underlying: "",
@@ -72,6 +119,7 @@ const Test: FunctionComponent<any> = (props) => {
   const [showbutton, setShowButton] = useState<boolean>(true);
   const [showGraph, setShowGraph] = useState<boolean>(false);
   const [showDropdownButton, setShowDropdownButton] = useState<boolean>(false);
+  const [showCandlestick, setShowCandlestick] = useState<boolean>(false);
   const [resData, setResData] = useState<responseDataType>({
     EMA: emptyRatio,
     TEMA: emptyRatio,
@@ -79,6 +127,35 @@ const Test: FunctionComponent<any> = (props) => {
   });
   const [graphType, setGraphType] = useState<string>("");
   const [dropdownValue, setDropdownValue] = useState<string>("Select Strategy");
+  const [candlestickOptions, setCandlestickOptions] = useState<optionsDataType>({
+    chart: {
+      type: 'candlestick',
+      height: 350
+    },
+    title: {
+      text: 'CandleStick Chart',
+      align: 'left'
+    },
+    xaxis: {
+      type: 'datetime'
+    },
+    tooltip: {
+      x: {
+        format: 'dd MMM yyyy'
+      }
+    },
+    yaxis: {
+      tooltip: {
+        enabled: true
+      }
+    }
+  })
+  const [candlestickSeries, setCandlestickSeries] = useState<seriesDataType[]>(
+    [{
+      name: 'Statistic',
+      data: []
+    }]
+  );
 
   const handleSubmit = (e: any) => {
     const form = e.currentTarget;
@@ -100,6 +177,7 @@ const Test: FunctionComponent<any> = (props) => {
           setShowButton(!showbutton);
           setShowGraph(true);
           setShowDropdownButton(true);
+          setShowCandlestick(true);
           let tempHeader = Object.keys(response.data['EMA']).map((d) => <th>{d}</th>);
           let tempRows = Object.keys(response.data['EMA']).map((d) => (
             <td>{response.data['EMA'][d]}</td>
@@ -108,6 +186,10 @@ const Test: FunctionComponent<any> = (props) => {
           setResData(response.data);
           setTableHeader(tempHeader);
           setTableRows(tempRows);
+          setCandlestickSeries([{
+            name: 'series-1',
+            data: response.data['OHLC']
+          }]);
         })
         .catch((err) => {
           console.log(err);
@@ -266,6 +348,11 @@ const Test: FunctionComponent<any> = (props) => {
       ) : (
         <></>
       )}
+      { showCandlestick ? (
+        <Chart options={candlestickOptions} series={candlestickSeries} type="candlestick" width={1100} height={500}/>
+      ) : (
+        <></>
+      )}
       
       <Table striped bordered hover responsive>
         <thead>
@@ -291,6 +378,7 @@ const Test: FunctionComponent<any> = (props) => {
           return <></>;
         }    
       })()}
+      
     </div>
   );
 };
