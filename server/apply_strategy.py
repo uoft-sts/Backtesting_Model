@@ -58,7 +58,7 @@ def performance_result(df_, df_price, strategy_name):
     record_df['Percentage_Change'] = record_df.apply (lambda row: percent_change(row), axis=1)
     record_df['Long/Short'] = record_df.apply (lambda row: set_long_short(row), axis=1)
     record_df['P_L'] = record_df.Exit_Price.values - record_df.Entry_Price.values
-    print(record_df)
+    #print(record_df)
     #record_df.to_csv(output_csv_path, encoding = 'utf-8', sep = ',', header = True,
     #            index = True)
 
