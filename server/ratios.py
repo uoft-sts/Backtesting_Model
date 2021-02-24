@@ -61,8 +61,11 @@ class Portfolio:
         return win_percent
 
     def compute_win_loss_ratio(self):
-        win_loss_ratio = self.wins / self.losses
-        return win_loss_ratio
+        if self.losses != 0:
+            win_loss_ratio = self.wins / self.losses
+            return win_loss_ratio
+        return "None"
+        
 
     def compute_volatility(self):
         n = self.num_trades
@@ -77,6 +80,12 @@ class Portfolio:
         excess_return = annual_return - RISK_FREE_RATE
         sigma = np.std(self.returns)
         sharpe_ratio = excess_return / sigma  # TODO: please check
+        if math.isnan(sharpe_ratio):
+            return "NaN"
+        elif math.isinf(sharpe_ratio) and sharpe_ratio > 0:
+            return "Infinity"
+        elif math.isinf(sharpe_ratio) and sharpe_ratio < 0:
+            return "-Infinity"
         return sharpe_ratio
 
     def compute_sortino_ratio(self, annual_return):
@@ -84,6 +93,12 @@ class Portfolio:
         negative_returns = self.returns[self.returns < 0]
         sigma = np.std(negative_returns)
         sortino_ratio = excess_return / sigma  # TODO: please check
+        if math.isnan(sortino_ratio):
+            return "NaN"
+        elif math.isinf(sortino_ratio) and sortino_ratio > 0:
+            return "Infinity"
+        elif math.isinf(sortino_ratio) and sortino_ratio < 0:
+            return "-Infinity"
         return sortino_ratio
 
     def compute_max_drawdown(self):
@@ -94,6 +109,12 @@ class Portfolio:
 
     def compute_calmar_ratio(self, annual_return, max_drawdown):
         calmar_ratio = annual_return / np.abs(max_drawdown)
+        if math.isnan(calmar_ratio):
+            return "NaN"
+        elif math.isinf(calmar_ratio) and calmar_ratio > 0:
+            return "Infinity"
+        elif math.isinf(calmar_ratio) and calmar_ratio < 0:
+            return "-Infinity"
         return calmar_ratio
 
     def compute_omega_ratio(self, required_return):
@@ -165,8 +186,9 @@ class Portfolio:
         #metrics["Alpha"] = self.compute_alpha(
             #metrics["Cumulative return"], metrics["Beta"], market_return
         #)
-        for key in metrics: 
-            metrics[key] = round(metrics[key], 4) 
+        for key in metrics:
+            if type(metrics[key]) is not str :
+                metrics[key] = round(metrics[key], 4) 
 
         return metrics
 
