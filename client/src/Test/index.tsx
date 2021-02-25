@@ -2,9 +2,11 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Form, Button, Row, Col, Table, Image, DropdownButton, Dropdown } from "react-bootstrap";
 import axios from "axios";
 import Chart from "react-apexcharts";
-import EMAGraph from "../graph/EMA.png"
-import TEMAGraph from "../graph/TEMA.png"
-import MACDGraph from "../graph/MACD.png"
+// import EMAGraph from "../graph/EMA.png"
+// import TEMAGraph from "../graph/TEMA.png"
+// import MACDGraph from "../graph/MACD.png"
+// import redarrow from '../image/redarrow.png'
+// import greenarrow from '../image/greenarrow.png'
 
 type submitDataType = {
   underlying: string;
@@ -36,6 +38,14 @@ type responseDataType = {
   "EMA": ratioDataType;
   "TEMA": ratioDataType;
   "MACD": ratioDataType;
+  "OHLC": number[];
+  "Close": number[];
+  "EMA_buy": number[];
+  "EMA_sell": number[];
+  "TEMA_buy": number[];
+  "TEMA_sell": number[];
+  "MACD_buy": number[];
+  "MACD_sell": number[];
 };
 
 // Data Type for candlestick
@@ -44,7 +54,10 @@ type optionsDataType = {
   title: titleDataType;
   xaxis: xaxisDataType;
   yaxis: yaxisDataType;
-  tooltip: tooltipDataType;
+  tooltip?: tooltipDataType;
+  markers?: markerDataType;
+  fill?: fillDataType;
+  colors?: string | string[];
 };
 
 type chartDataType = {
@@ -76,11 +89,33 @@ type tooltipDataType = {
   enabled?: boolean;
   x?: labelDataType;
   y?: labelDataType;
-}
+  shared?: boolean;
+  intersect?: boolean;
+};
+
+type markerDataType = {
+  size: number[];
+  shape?: string;
+  colors?: string[] | string;
+};
 
 type seriesDataType = {
   name: string;
   data: number[] | number[][];
+  type?: string;
+};
+
+type fillDataType = {
+  type: string | string[];
+  opacity?: number;
+  image?: imageDataType;
+  colors?: string[] | string;
+};
+
+type imageDataType = {
+  src: string | string[];
+  width?: number;
+  height?: number;
 };
 
 
@@ -117,16 +152,25 @@ const Test: FunctionComponent<any> = (props) => {
   const [tableHeader, setTableHeader] = useState<any>(<></>);
   const [tableRows, setTableRows] = useState<any>(<></>);
   const [showbutton, setShowButton] = useState<boolean>(true);
-  const [showGraph, setShowGraph] = useState<boolean>(false);
+  //const [showGraph, setShowGraph] = useState<boolean>(false);
   const [showDropdownButton, setShowDropdownButton] = useState<boolean>(false);
   const [showCandlestick, setShowCandlestick] = useState<boolean>(false);
+  const [showLine, setShowLine] = useState<boolean>(false);
   const [resData, setResData] = useState<responseDataType>({
     EMA: emptyRatio,
     TEMA: emptyRatio,
-    MACD: emptyRatio
+    MACD: emptyRatio,
+    "OHLC": [],
+    "Close": [],
+    "EMA_buy": [],
+    "EMA_sell": [],
+    "TEMA_buy": [],
+    "TEMA_sell": [],
+    "MACD_buy": [],
+    "MACD_sell": []
   });
   const [graphType, setGraphType] = useState<string>("");
-  const [dropdownValue, setDropdownValue] = useState<string>("Select Strategy");
+  const [dropdownValue, setDropdownValue] = useState<string>("EMA");
   const [candlestickOptions, setCandlestickOptions] = useState<optionsDataType>({
     chart: {
       type: 'candlestick',
@@ -156,6 +200,55 @@ const Test: FunctionComponent<any> = (props) => {
       data: []
     }]
   );
+  const [lineOptions, setLineOptions] = useState<optionsDataType>({
+    chart: {
+      height: 350,
+      type: 'line'
+    },
+    title: {
+      text: 'Trading Record',
+      align: 'left'
+    },
+    xaxis: {
+      type: 'datetime'
+    },
+    tooltip: {
+      x: {
+        format: 'dd MMM yyyy'
+      },
+      shared: false,
+      intersect: true,
+    },
+    yaxis: {
+      tooltip: {
+        enabled: true
+      }
+    },
+    markers: {
+      size: [0,6,6],
+    },
+    fill: {
+      type: 'solid',
+      
+    },
+    colors: ['#267CE3', '#22DB35', '#FF3F00']
+  });
+
+  const [lineSeries, setLineSeries] = useState<seriesDataType[]>(
+    [{
+      name: 'Line',
+      type: "line",
+      data: []
+    },{
+      name: 'Buy',
+      type: "scatter",
+      data: []
+    },{
+      name: 'Sell',
+      type: "scatter",
+      data: []
+    }]
+  );
 
   const handleSubmit = (e: any) => {
     const form = e.currentTarget;
@@ -175,20 +268,34 @@ const Test: FunctionComponent<any> = (props) => {
       })
         .then((response) => {
           setShowButton(!showbutton);
-          setShowGraph(true);
+          //setShowGraph(true);
           setShowDropdownButton(true);
           setShowCandlestick(true);
-          let tempHeader = Object.keys(response.data['EMA']).map((d) => <th>{d}</th>);
-          let tempRows = Object.keys(response.data['EMA']).map((d) => (
-            <td>{response.data['EMA'][d]}</td>
+          setShowLine(true);
+          let tempHeader = Object.keys(response.data[dropdownValue]).map((d) => <th>{d}</th>);
+          let tempRows = Object.keys(response.data[dropdownValue]).map((d) => (
+            <td>{response.data[dropdownValue][d]}</td>
           ));
           setGraphType("EMA");
           setResData(response.data);
           setTableHeader(tempHeader);
           setTableRows(tempRows);
           setCandlestickSeries([{
-            name: 'series-1',
+            name: 'Candlestick',
             data: response.data['OHLC']
+          }]);
+          setLineSeries([{
+            name: 'Closing Price',
+            type: 'line',
+            data: response.data['Close']
+          }, {
+            name: 'Buy',
+            type: 'scatter',
+            data: response.data[dropdownValue+'_buy']
+          }, {
+            name: 'Sell',
+            type: 'scatter',
+            data: response.data[dropdownValue+'_sell']
           }]);
         })
         .catch((err) => {
@@ -207,6 +314,19 @@ const Test: FunctionComponent<any> = (props) => {
         <td>{(resData['EMA'] as any)[d]}</td>
       ));
       setGraphType("EMA");
+      setLineSeries([{
+        name: 'Closing Price',
+        type: 'line',
+        data: resData['Close']
+      }, {
+        name: 'Buy',
+        type: 'scatter',
+        data: resData['EMA_buy']
+      }, {
+        name: 'Sell',
+        type: 'scatter',
+        data: resData['EMA_sell']
+      }]);
       console.log(graphType);
     }
     else if(e === "TEMA"){
@@ -215,6 +335,19 @@ const Test: FunctionComponent<any> = (props) => {
         <td>{(resData['TEMA'] as any)[d]}</td>
       ));
       setGraphType("TEMA");
+      setLineSeries([{
+        name: 'Closing Price',
+        type: 'line',
+        data: resData['Close']
+      }, {
+        name: 'Buy',
+        type: 'scatter',
+        data: resData['TEMA_buy']
+      }, {
+        name: 'Sell',
+        type: 'scatter',
+        data: resData['TEMA_sell']
+      }]);
       console.log(graphType);
     } else {
       tempHeader = Object.keys(resData['MACD']).map((d) => <th>{d}</th>);
@@ -222,6 +355,19 @@ const Test: FunctionComponent<any> = (props) => {
         <td>{(resData['MACD'] as any)[d]}</td>
       ));
       setGraphType("MACD");
+      setLineSeries([{
+        name: 'Closing Price',
+        type: 'line',
+        data: resData['Close']
+      }, {
+        name: 'Buy',
+        type: 'scatter',
+        data: resData['MACD_buy']
+      }, {
+        name: 'Sell',
+        type: 'scatter',
+        data: resData['MACD_sell']
+      }]);
       console.log(graphType);
     }
     setTableHeader(tempHeader);
@@ -348,12 +494,7 @@ const Test: FunctionComponent<any> = (props) => {
       ) : (
         <></>
       )}
-      { showCandlestick ? (
-        <Chart options={candlestickOptions} series={candlestickSeries} type="candlestick" width={1100} height={500}/>
-      ) : (
-        <></>
-      )}
-      
+
       <Table striped bordered hover responsive>
         <thead>
           <tr>{tableHeader}</tr>
@@ -361,8 +502,21 @@ const Test: FunctionComponent<any> = (props) => {
         <tbody>
           <tr>{tableRows}</tr>
         </tbody>
-      </Table>
-      {(function() {
+      </Table>  
+
+      { showLine ? (
+        <Chart options={lineOptions} series={lineSeries} type="line" width={1100} height={500}/>
+      ) : (
+        <></>
+      )}
+
+      { showCandlestick ? (
+        <Chart options={candlestickOptions} series={candlestickSeries} type="candlestick" width={1100} height={500}/>
+      ) : (
+        <></>
+      )}
+
+      {/* {(function() {
         if(showGraph) {
           if (graphType === "EMA") {
             console.log("here at ema");
@@ -377,7 +531,7 @@ const Test: FunctionComponent<any> = (props) => {
         } else {
           return <></>;
         }    
-      })()}
+      })()} */}
       
     </div>
   );

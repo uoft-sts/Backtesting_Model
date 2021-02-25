@@ -68,6 +68,8 @@ def result():
     df_['time'] = pd.to_datetime(df_['time'])
     df_ohlc = df_[["time", "open", "high", "low", "close"]]
     list_ohlc = df_ohlc.values.tolist()
+    df_close = df_[["time", "close"]]
+    list_close = df_close.values.tolist()
     
     # Strategy EMA
     EMA_short = ta.EMA(df_['close'], timeperiod = 5)
@@ -92,12 +94,36 @@ def result():
     # Creating DF & Dictionary for every strategy
     df_price_ema = ema_execution(df_)
     performance_summ_ema = performance_result(df_, df_price_ema,'EMA')
+    df_['EMA_Buy_Signal_Price'] = df_price_ema[0]
+    df_['EMA_Sell_Signal_Price'] = df_price_ema[1]
+    df_ema_buy = df_[df_['EMA_Buy_Signal_Price'].notna()]
+    df_ema_sell = df_[df_['EMA_Sell_Signal_Price'].notna()]
+    df_ema_buy_clean = df_ema_buy[["time", "EMA_Buy_Signal_Price"]] # keep 3 columns we want
+    list_ema_buy = df_ema_buy_clean.values.tolist()
+    df_ema_sell_clean = df_ema_sell[["time", "EMA_Sell_Signal_Price"]]
+    list_ema_sell = df_ema_sell_clean.values.tolist()
 
     df_price_tema = tema_execution(df_)
     performance_summ_tema = performance_result(df_, df_price_tema,'TEMA')
+    df_['TEMA_Buy_Signal_Price'] = df_price_tema[0]
+    df_['TEMA_Sell_Signal_Price'] = df_price_tema[1]
+    df_tema_buy = df_[df_['TEMA_Buy_Signal_Price'].notna()]
+    df_tema_sell = df_[df_['TEMA_Sell_Signal_Price'].notna()]
+    df_tema_buy_clean = df_tema_buy[["time", "TEMA_Buy_Signal_Price"]] # keep 3 columns we want
+    list_tema_buy = df_tema_buy_clean.values.tolist()
+    df_tema_sell_clean = df_tema_sell[["time", "TEMA_Sell_Signal_Price"]]
+    list_tema_sell = df_tema_sell_clean.values.tolist()
 
     df_price_macd = macd_execution(df_)
     performance_summ_macd = performance_result(df_, df_price_macd,'MACD')
+    df_['MACD_Buy_Signal_Price'] = df_price_macd[0]
+    df_['MACD_Sell_Signal_Price'] = df_price_macd[1]
+    df_macd_buy = df_[df_['MACD_Buy_Signal_Price'].notna()]
+    df_macd_sell = df_[df_['MACD_Sell_Signal_Price'].notna()]
+    df_macd_buy_clean = df_macd_buy[["time", "MACD_Buy_Signal_Price"]] # keep 3 columns we want
+    list_macd_buy = df_macd_buy_clean.values.tolist()
+    df_macd_sell_clean = df_macd_sell[["time", "MACD_Sell_Signal_Price"]]
+    list_macd_sell = df_macd_sell_clean.values.tolist()
 
     # Concatenating strategy DF into one big DF
     data = {}
@@ -105,6 +131,13 @@ def result():
     data["TEMA"] = performance_summ_tema
     data["MACD"] = performance_summ_macd
     data["OHLC"] = list_ohlc
+    data["Close"] = list_close
+    data["EMA_buy"] = list_ema_buy
+    data["EMA_sell"] = list_ema_sell
+    data["TEMA_buy"] = list_tema_buy
+    data["TEMA_sell"] = list_tema_sell
+    data["MACD_buy"] = list_macd_buy
+    data["MACD_sell"] = list_macd_sell
     #print(data)
     return data           
 
