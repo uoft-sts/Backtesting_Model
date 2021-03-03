@@ -120,7 +120,7 @@ class Portfolio:
     def compute_omega_ratio(self, required_return):
         excess_return = self.returns - RISK_FREE_RATE - required_return
         threshold_gains = np.sum(excess_return[np.where(excess_return > 0)[0]])
-        threshold_loss = -np.sum(excess_return[np.where(excess_return < 0)[0]])
+        threshold_loss = -np.sum(excess_return.reindex(np.where(excess_return < 0)[0]))
         if threshold_loss > 0:
             omega_ratio = threshold_gains / threshold_loss
             return omega_ratio
