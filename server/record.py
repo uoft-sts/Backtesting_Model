@@ -9,7 +9,6 @@ def ema_execution(df):
     Buy = []
     Sell = []
     flag = -1 
-    
     # flag = 1 (Long position) Flag = 0 (short Position) Flag = -1 (None)
     
     for i in range(0, len(df)):
@@ -32,7 +31,6 @@ def ema_execution(df):
         else:
             Buy.append(np.nan)
             Sell.append(np.nan)
-
     return (Buy, Sell)
 
 
@@ -41,7 +39,6 @@ def tema_execution(df):
     Buy = []
     Sell = []
     flag = -1
-
     for i in range (len(df)):
         if df['TEMA_short'][i] > df['TEMA_long'][i]:
             Sell.append(np.nan)
@@ -62,8 +59,6 @@ def tema_execution(df):
         else:
             Buy.append(np.nan)
             Sell.append(np.nan)
-
-
     return (Buy, Sell)
 
 
@@ -72,7 +67,6 @@ def macd_execution(signal):
     Buy = []
     Sell = []
     flag = -1
-
     for i in range(0, len(signal)):
         if signal['MACD'][i] > signal['Signal_line'][i]:
             Sell.append(np.nan)
@@ -88,8 +82,7 @@ def macd_execution(signal):
                 flag = 0
             else:
                 Sell.append(np.nan)
-    else:
-        Buy.append(np.nan)
-        Sell.append(np.nan)
-
+        else:
+            Buy.append(np.nan)
+            Sell.append(np.nan)
     return (Buy, Sell)
