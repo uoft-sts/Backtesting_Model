@@ -2,9 +2,9 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { Form, Button, Row, Col, Table, Image, DropdownButton, Dropdown } from "react-bootstrap";
 import axios from "axios";
 import Chart from "react-apexcharts";
-import EMAGraph from "../graph/EMA.png"
-import TEMAGraph from "../graph/TEMA.png"
-import MACDGraph from "../graph/MACD.png"
+// import EMAGraph from "../graph/EMA.png"
+// import TEMAGraph from "../graph/TEMA.png"
+// import MACDGraph from "../graph/MACD.png"
 // import redarrow from '../image/redarrow.png'
 // import greenarrow from '../image/greenarrow.png'
 
@@ -152,7 +152,7 @@ const Test: FunctionComponent<any> = (props) => {
   const [tableHeader, setTableHeader] = useState<any>(<></>);
   const [tableRows, setTableRows] = useState<any>(<></>);
   const [showbutton, setShowButton] = useState<boolean>(true);
-  const [showGraph, setShowGraph] = useState<boolean>(false);
+  // const [showGraph, setShowGraph] = useState<boolean>(false);
   const [showDropdownButton, setShowDropdownButton] = useState<boolean>(false);
   const [showCandlestick, setShowCandlestick] = useState<boolean>(false);
   const [showLine, setShowLine] = useState<boolean>(false);
@@ -268,7 +268,7 @@ const Test: FunctionComponent<any> = (props) => {
       })
         .then((response) => {
           setShowButton(!showbutton);
-          setShowGraph(true);
+          // setShowGraph(true);
           setShowDropdownButton(true);
           setShowCandlestick(true);
           setShowLine(true);
@@ -516,7 +516,7 @@ const Test: FunctionComponent<any> = (props) => {
         <></>
       )}
 
-      {(function() {
+      {/* {(function() {
         if(showGraph) {
           if (graphType === "EMA") {
             console.log("here at ema");
@@ -531,7 +531,7 @@ const Test: FunctionComponent<any> = (props) => {
         } else {
           return <></>;
         }    
-      })()}
+      })()} */}
       
     </div>
   );
