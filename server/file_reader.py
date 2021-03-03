@@ -45,12 +45,14 @@ class File_Reader:
         if self.underlying_filters and self.expiration_filters:
             exp_df = self.underlying_filter()
             exp_df['Exp_Month'] = exp_df.Exp_day.apply(lambda exp: exp[-2:])
-            exp_df = exp_df[exp_df.Exp_Month == self.contract_exp]
+            exp_df['Exp_Month'] = exp_df['Exp_Month'].astype(int)
+            exp_df = exp_df[exp_df.Exp_Month == int(self.contract_exp)]
             return exp_df
         elif self.expiration_filters:
             exp_df = self.file_df
             exp_df['Exp_Month'] = exp_df.Exp_day.apply(lambda exp: exp[-2:])
-            exp_df = exp_df[exp_df.Exp_Month == self.contract_exp]
+            exp_df['Exp_Month'] = exp_df['Exp_Month'].astype(int)
+            exp_df = exp_df[exp_df.Exp_Month == int(self.contract_exp)]
             return exp_df
 
 class Roll_Dates_First_Of_Month(File_Reader):
