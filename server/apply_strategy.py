@@ -39,7 +39,7 @@ def performance_result(df_, df_price, strategy_name):
     # Concat buy + sell into one dataframe
     data_arr = np.array(data)
     arr = np.arange(len(data))
-    print(data_arr)
+    # print(data_arr)
     Buy_data_arr=data_arr[arr % 2 ==0]
     Sell_data_arr=data_arr[arr % 2 == 1]
     good_data_arr = np.concatenate([Buy_data_arr,Sell_data_arr],axis=1)
@@ -62,7 +62,7 @@ def performance_result(df_, df_price, strategy_name):
     record_df['P_L'] = record_df.Exit_Price.values - record_df.Entry_Price.values
     record_df.sort_values(by='Entry_Date', inplace=True)
     record_df = record_df[record_df.Entry_Date < record_df.Exit_Date]
-    #print(record_df)
+    print(record_df)
     #record_df.to_csv(output_csv_path, encoding = 'utf-8', sep = ',', header = True,
     #            index = True)
 
