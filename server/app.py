@@ -95,6 +95,7 @@ def result():
     df_['Signal_line'] = signal
 
     # Creating DF & Dictionary for every strategy
+    df_ = df_.sort_index()
     df_price_ema = ema_execution(df_)
     performance_summ_ema = performance_result(df_, df_price_ema,'EMA')
     df_['EMA_Buy_Signal_Price'] = df_price_ema[0]
@@ -120,7 +121,7 @@ def result():
     list_tema_sell = df_tema_sell_clean.values.tolist()
 
     df_price_macd = macd_execution(df_)
-    print(df_price_macd)
+    # print(df_price_macd)
     performance_summ_macd = performance_result(df_, df_price_macd,'MACD')
     df_['MACD_Buy_Signal_Price'] = df_price_macd[0]
     df_['MACD_Sell_Signal_Price'] = df_price_macd[1]
