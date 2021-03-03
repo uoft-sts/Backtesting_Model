@@ -8,9 +8,12 @@ import pandas_datareader as web
 
 def performance_result(df_, df_price, strategy_name):
     #前台传入的strategy name必须是要和对应strategy函数名相同
-
+    
     df_['Buy_Signal_Price'] = df_price[0]
     df_['Sell_Signal_Price'] = df_price[1]
+    df_ = df_.sort_index()
+    # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+    #     print(df_)
     
     fig = plt.figure(figsize = (15, 7))
     plt.scatter(df_.index, df_['Buy_Signal_Price'], color = 'green', label = 'Buy', marker = '^', alpha = 0.6)
@@ -20,8 +23,6 @@ def performance_result(df_, df_price, strategy_name):
     plt.legend(loc = 'best')
     plt.xlabel('Date')
     plt.ylabel('Price')
-
-    
     fig.savefig('../client/src/graph/' + strategy_name + '.png', dpi=fig.dpi)
     
     # Data Filtering
@@ -38,6 +39,7 @@ def performance_result(df_, df_price, strategy_name):
     # Concat buy + sell into one dataframe
     data_arr = np.array(data)
     arr = np.arange(len(data))
+    print(data_arr)
     Buy_data_arr=data_arr[arr % 2 ==0]
     Sell_data_arr=data_arr[arr % 2 == 1]
     good_data_arr = np.concatenate([Buy_data_arr,Sell_data_arr],axis=1)
@@ -58,6 +60,8 @@ def performance_result(df_, df_price, strategy_name):
     record_df['Percentage_Change'] = record_df.apply (lambda row: percent_change(row), axis=1)
     record_df['Long/Short'] = record_df.apply (lambda row: set_long_short(row), axis=1)
     record_df['P_L'] = record_df.Exit_Price.values - record_df.Entry_Price.values
+    record_df.sort_values(by='Entry_Date', inplace=True)
+    record_df = record_df[record_df.Entry_Date < record_df.Exit_Date]
     #print(record_df)
     #record_df.to_csv(output_csv_path, encoding = 'utf-8', sep = ',', header = True,
     #            index = True)

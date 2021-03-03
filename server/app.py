@@ -62,13 +62,16 @@ def result():
                         output_file_path = output_csv_path)
     df = a.expiration_filter()
     df_ = a.fit_transform(df)
-    df_ = df_.loc[daterange_from:daterange_to]
+    df_ = df_.loc[daterange_from:daterange_to]  
+    #with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+    #    print(df_)
     
     df_["time"] = df_.index
     df_['time'] = pd.to_datetime(df_['time'])
     df_ohlc = df_[["time", "open", "high", "low", "close"]]
     list_ohlc = df_ohlc.values.tolist()
     df_close = df_[["time", "close"]]
+    df_close.sort_values(by='time', inplace=True)
     list_close = df_close.values.tolist()
     
     # Strategy EMA
@@ -98,9 +101,11 @@ def result():
     df_['EMA_Sell_Signal_Price'] = df_price_ema[1]
     df_ema_buy = df_[df_['EMA_Buy_Signal_Price'].notna()]
     df_ema_sell = df_[df_['EMA_Sell_Signal_Price'].notna()]
-    df_ema_buy_clean = df_ema_buy[["time", "EMA_Buy_Signal_Price"]] # keep 3 columns we want
+    df_ema_buy_clean = df_ema_buy[["time", "EMA_Buy_Signal_Price"]]
+    df_ema_buy_clean.sort_values(by='time', inplace=True)
     list_ema_buy = df_ema_buy_clean.values.tolist()
     df_ema_sell_clean = df_ema_sell[["time", "EMA_Sell_Signal_Price"]]
+    df_ema_sell_clean.sort_values(by='time', inplace=True)
     list_ema_sell = df_ema_sell_clean.values.tolist()
 
     df_price_tema = tema_execution(df_)
@@ -115,6 +120,7 @@ def result():
     list_tema_sell = df_tema_sell_clean.values.tolist()
 
     df_price_macd = macd_execution(df_)
+    print(df_price_macd)
     performance_summ_macd = performance_result(df_, df_price_macd,'MACD')
     df_['MACD_Buy_Signal_Price'] = df_price_macd[0]
     df_['MACD_Sell_Signal_Price'] = df_price_macd[1]
