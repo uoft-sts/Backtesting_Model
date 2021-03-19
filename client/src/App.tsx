@@ -3,9 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { NavigationBar,TopHeader } from "./ts/components/index";
 
-import {Home, About} from "./Home/index";
+import {Home, About, Install} from "./Home/index";
 import Test from "./Test/index";
-
 import "./App.scss";
 
 function App() {
@@ -17,6 +16,7 @@ function App() {
         <Router>
           <Switch>
             <Route exact path="/" component={Home} />
+            <Route exact path="/install" component={Install} />
             <Route exact path="/test" component={Test} />
             <Route exact path="/about" component={About} />
           </Switch>

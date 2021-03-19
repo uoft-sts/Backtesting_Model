@@ -11,6 +11,9 @@ const NavigationBar: FunctionComponent<any> = () => {
         <Navbar.Collapse id="basic-navbar-nav" />
         <Nav>
           <Nav.Item>
+            <Nav.Link href="/install">Install</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
             <Nav.Link href="/test">Test</Nav.Link>
           </Nav.Item>
           <Nav.Item>
