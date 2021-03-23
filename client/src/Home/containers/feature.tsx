@@ -1,20 +1,21 @@
 import { FunctionComponent } from 'react';
 import Feature, { Title } from '../components/feature/index';
 import logo from '../../image/sts-logo.png';
+import Install from './Install';
 
 const FEATURES = [
 	{
 		id: 1,
-		title: 'Enjoy on your TV.',
-		description: 'Watch on smart TVs, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray players and more.',
+		title: 'Presentation 1',
+		description: 'Description 1',
 		video: '',
 		image: logo,
 		alt: 'Roseflix on TV'
 	},
 	{
 		id: 2,
-		title: 'Download your shows to watch offline.',
-		description: 'Save your favorites easily and always have something to watch.',
+		title: 'Presentation 2',
+		description: 'Description 2',
 		video: '',
 		image: logo,
 		alt: 'Roseflix on mobile',
@@ -22,10 +23,18 @@ const FEATURES = [
 	},
 	{
 		id: 3,
-		title: 'Watch everywhere.',
-		description: 'Stream unlimited movies and TV shows on your phone, tablet, laptop and TV without paying more.',
+		title: 'Presentation 3',
+		description: 'Description 3',
 		image: logo,
 		alt: 'Roseflix on different devices'
+	},
+	{
+		id: 4,
+		title: 'Presentation 4',
+		description: 'Description 4',
+		image: logo,
+		alt: 'Roseflix on different devices',
+		direction: 'row-reverse'
 	}
 ];
 
@@ -43,6 +52,7 @@ function FeatureContainer (){
 					</Feature.Panel>
 				</Feature>
 			))}
+			<Install/>
 		</Feature.Container>
 	);
 }

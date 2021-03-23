@@ -1,8 +1,9 @@
+import { isAbsolute } from 'path';
 import React, { FunctionComponent, useState } from 'react';
 import Scrollbar from 'react-scrollbars-custom';
 //import { BannerContainer, FaqsContainer, FeatureContainer, FooterContainer, HeaderContainer } from '../containers';
 import BannerContainer from "../containers/banner";
-import FeatureContainer from "../containers/feature"
+import FeatureContainer from "../containers/feature";
 
 const Home : FunctionComponent<any> = () => {
 	const [ isHeaderShown, setHeaderShown ] = useState(false);
@@ -15,15 +16,10 @@ const Home : FunctionComponent<any> = () => {
 		}
 	};
 	return (
-    <div>
-      {/*<Scrollbar noDefaultStyles className="main-scrollbar" onScroll={({ scrollTop }: any) => handleOnScroll(scrollTop)}>*/}
-        {/*<HeaderContainer isHeaderShown={isHeaderShown} />*/}
-        <BannerContainer />
-        <FeatureContainer />
-        {/*<FaqsContainer />
-        <FooterContainer />*/}
-      {/*</Scrollbar>*/}
-    </div>
+	<div>
+		<BannerContainer />
+		<FeatureContainer />
+	</div>
 	);
 }
 

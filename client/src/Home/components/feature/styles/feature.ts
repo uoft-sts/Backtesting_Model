@@ -20,7 +20,11 @@ export const Inner = styled.div`
 	}
 `;
 
-export const Container = styled.div``;
+export const Container = styled.div`
+	position: absolute;
+	left: 0;
+	right: 0;
+`;
 
 export const Item = styled.div`
 	display: flex;
@@ -42,7 +46,8 @@ export const Title = styled.h1`
 
 export const Description = styled.h2`
 	font-weight: 500;
-
+	color: red;
+	
 	@media (max-width: 600px) {
 		font-size: 1.3rem;
 	}

@@ -1,20 +1,23 @@
 import styled from 'styled-components/macro';
-import logo from '../../../../image/sts-logo.png';
+import stock from '../../../../image/stock.jpg';
 
 export const Container = styled.div`
 	display: flex;
+	width: 100%;
 	height: 83vh;
 	background: linear-gradient(to top, rgb(0 0 0 / 90%) 0, rgb(0 0 0 / 20%) 60%, rgb(0 0 0 / 90%) 100%),
-		url(${logo});
+		url(${stock});
 	background-size: cover;
 	background-position: 50% 50%;
 	border-bottom: 0.5rem solid #222;
-
+	
 	@media (max-width: 1000px) {
 		height: 75vh;
+		float: left;
 	}
 	@media (max-width: 600px) {
 		height: 55vh;
+		float: left;
 	}
 `;
 

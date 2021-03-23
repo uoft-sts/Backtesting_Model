@@ -64,6 +64,12 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.background.paper,
       padding: theme.spacing(6),
     },
+    wrapper: {
+      position: 'absolute',
+      left: 0,
+      bottom: 0,
+      right: 0
+    },
 }));
 
 const cards = ["Windows", "Mac", "Linux"];
