@@ -263,7 +263,8 @@ const Test: FunctionComponent<any> = (props) => {
       console.log(formData);
       axios({
         method: "post",
-        url: "http://127.0.0.1:5000/result/",
+        //url: "http://127.0.0.1:5000/result/",
+        url: "https://stsbacktest.herokuapp.com/result",
         params: formData,
       })
         .then((response) => {

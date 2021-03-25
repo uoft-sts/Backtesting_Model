@@ -19,11 +19,12 @@ import pandas_datareader as web
 from flask_cors import CORS
 from apply_strategy import *
 import datetime as dt
+from home_stock import Price_Getter
 
 matplotlib.use('Agg')
 
 UPLOAD_FOLDER = './data/'
-app = Flask(__name__)
+app = Flask(__name__, static_folder="./build", static_url_path="/")
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -148,9 +149,17 @@ def result():
     #print(data)
     return data           
 
+@app.route('/home/stocks', methods=['GET'])    
+def get_stock():
+    a = Price_Getter(['AAPL', 'SPY', 'AMZN', 'ABNB', 'JD'])
+    a.yahoo_live_tick()
+    print(a)
+    return jsonify({"a": "a"})
+    
 @app.route("/")
 def index():
-    return render_template("index.html")
+    #return render_template("index.html")
+    return app.send_static_file("index.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

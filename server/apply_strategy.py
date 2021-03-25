@@ -15,15 +15,15 @@ def performance_result(df_, df_price, strategy_name):
     # with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
     #     print(df_)
     
-    fig = plt.figure(figsize = (15, 7))
-    plt.scatter(df_.index, df_['Buy_Signal_Price'], color = 'green', label = 'Buy', marker = '^', alpha = 0.6)
-    plt.scatter(df_.index, df_['Sell_Signal_Price'], color = 'red', label = 'Sell', marker = 'v', alpha = 0.6)
-    plt.plot(df_['close'], label = 'close', alpha = 0.4)
-    plt.title('Backtesting with ' + strategy_name)
-    plt.legend(loc = 'best')
-    plt.xlabel('Date')
-    plt.ylabel('Price')
-    fig.savefig('../client/src/graph/' + strategy_name + '.png', dpi=fig.dpi)
+    # fig = plt.figure(figsize = (15, 7))
+    # plt.scatter(df_.index, df_['Buy_Signal_Price'], color = 'green', label = 'Buy', marker = '^', alpha = 0.6)
+    # plt.scatter(df_.index, df_['Sell_Signal_Price'], color = 'red', label = 'Sell', marker = 'v', alpha = 0.6)
+    # plt.plot(df_['close'], label = 'close', alpha = 0.4)
+    # plt.title('Backtesting with ' + strategy_name)
+    # plt.legend(loc = 'best')
+    # plt.xlabel('Date')
+    # plt.ylabel('Price')
+    # fig.savefig('../client/src/graph/' + strategy_name + '.png', dpi=fig.dpi)
     
     # Data Filtering
     data = []
