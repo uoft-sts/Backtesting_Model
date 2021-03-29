@@ -64,6 +64,7 @@
   },
   "proxy": "https://localhost:3000",
   "devDependencies": {
+    "@types/react-plotly.js": "^2.2.4",
     "electron": "^11.2.1",
     "electron-packager": "^15.2.0"
   }
