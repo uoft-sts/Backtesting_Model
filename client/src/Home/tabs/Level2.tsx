@@ -61,7 +61,7 @@ class Level2 extends Component{
                 end_Num++;
             }
 
-            if(color == 5)
+            if(color == 6)
             {
                 color = 0;
             }
