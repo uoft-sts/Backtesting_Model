@@ -82,8 +82,9 @@ class Level2 extends Component{
   <thead>
     <tr>
       <th>Market Makers</th>
-      <th>Price</th>
+      
       <th>Order Size</th>
+      <th>Price</th>
     </tr>
   </thead>
   <tbody>
@@ -103,17 +104,7 @@ class Level2 extends Component{
     </tr>
   </thead>
   <tbody>
-    <tr className="table-warning">
-    <td>EDGA</td>
-      <td>175.25</td>
-      <td>175.22</td>
-    </tr>
-    <tr className="table-success">
-    <td>EDGA</td>
-      <td>175.25</td>
-      <td>175.22</td>
-    </tr>
-    
+   {arr}
   </tbody>
 </Table>
 </Col>
