@@ -146,7 +146,28 @@ def result():
     data["MACD_buy"] = list_macd_buy
     data["MACD_sell"] = list_macd_sell
     #print(data)
-    return data           
+    return data   
+
+@app.route('/simulation/', methods=['GET'])
+def getSimulationData():
+    df = pd.read_csv('./data/SimulationTrades.csv')
+    unixTimeList = []
+    priceList = df['PRICE'].tolist()
+    tempDate = df['DATE'].tolist()
+    tempTime = df['TIME_M'].tolist()
+
+    for i in range(0,len(tempDate)):
+        date = str(tempDate[i])
+        date = date[:4]+'-'+date[4:6]+'-'+date[6:]+' '
+        nofrag, frag = tempTime[i].split(".")
+        frag = frag[:6]
+        convertTime = int(time.mktime(time.strptime(date+nofrag+'.'+frag, '%Y-%m-%d %H:%M:%S.%f')))
+        unixTimeList.append(convertTime)
+
+    responseData = {}
+    responseData['time'] = unixTimeList
+    responseData['price'] = priceList
+    return responseData      
 
 @app.route("/")
 def index():
