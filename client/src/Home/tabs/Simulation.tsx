@@ -1,5 +1,6 @@
 import React,{ FunctionComponent,useEffect, useState,Component} from 'react';
 import ChartNew from './ChartNew';
+import TimeNSales from './TimeNSales';
 
 class Simulation extends Component{
     
@@ -7,7 +8,10 @@ class Simulation extends Component{
         
         
         return(
-            <ChartNew />
+            <div>
+                <TimeNSales />
+                <ChartNew />
+            </div>
         )
 
         

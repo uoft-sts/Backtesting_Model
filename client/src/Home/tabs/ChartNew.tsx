@@ -9,7 +9,7 @@ function ChartNew(){
         LightweightCharts = require('lightweight-charts');
         const { createChart } = LightweightCharts;
         var chart = LightweightCharts.createChart(document.body, {
-          width: 1200,
+          width: 600,
           height: 300,
           
           layout: {
