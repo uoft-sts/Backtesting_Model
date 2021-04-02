@@ -1,5 +1,6 @@
 import React,{ FunctionComponent,useEffect, useState,Component} from 'react';
 import ChartNew from './ChartNew';
+import Level2 from './Level2';
 import { Form, Button, Row, Col, Table, Image, DropdownButton, Dropdown } from "react-bootstrap";
 class Simulation extends Component{
     
@@ -10,6 +11,7 @@ class Simulation extends Component{
 
             
             <div>
+              <Level2 />
             <Form.Group controlId="enddate">
                 <Form.Label>Select End Date:</Form.Label>
                 <Form.Control
