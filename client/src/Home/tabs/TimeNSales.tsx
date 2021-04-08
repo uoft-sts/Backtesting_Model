@@ -5,17 +5,23 @@ import { Form, Button, Row, Col, Table, Image, DropdownButton, Dropdown, Contain
 class TimeNSales extends Component{
 
     createTable = () => {
-        var my_data = [[10,11,12,13,14,15,17,18],[1,2,3,1,2,3,1,2],[1,2,3,1,2,3,1,2]]
+        var my_data = [[10,11,12,13,14,15,17,18],[1,2,3,1,2,3,1,2],[1,2,3,1,2,3,1,2],[10,11,12,13,14,15,17,18],[10,11,12,13,14,15,17,18]]
         let table = []
+        var colour = ["table-primary","table-secondary","table-success", "table-danger"]
         // Outer loop to create parent
-        for (let i = 0; i < 3; i++) {
+        var k=0
+        for (let i = 0; i < my_data.length; i++) {
           let children = []
           //Inner loop to create children
           for (let j = 0; j < my_data[1].length; j++) {
             children.push(<td>{`hello ${my_data[i][j]}`}</td>)
           }
           //Create the parent and add the children
-          table.push(<tr>{children}</tr>)
+          table.push(<tr className={colour[k]}>{children}</tr>)
+          k+=1
+          if (k == 4) {
+            k = 0
+          }
         }
         return table
     }
