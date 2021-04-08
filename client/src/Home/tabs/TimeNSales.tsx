@@ -26,6 +26,36 @@ class TimeNSales extends Component{
         return table
     }
 
+    
+    createUpperTable = () => {
+      var my_data_second = [10,11,12,13,14,15]
+      let table = []
+      // Outer loop to create parent
+      var k=0
+        let children = []
+        //Inner loop to create children
+        // children.push(<td >{`hello ${my_data[i][j]}`}</td>)
+        children.push(<td>{`Bid ${my_data_second[0]}`}</td>)
+        children.push(<td>{`Bid Size${my_data_second[1]}`}</td>)
+        children.push(<td>{`Low ${my_data_second[2]}`}</td>)
+        children.push(<td>{`change`}</td>)
+        //Create the parent and add the children
+        table.push(<tr>{children}</tr>)
+
+        children = []
+        children.push(<td>{`Ask ${my_data_second[0]}`}</td>)
+        children.push(<td>{`Ask Size ${my_data_second[1]}`}</td>)
+        children.push(<td >{`High ${my_data_second[2]}`}</td>)
+        children.push(<td>{`change(open)`}</td>)
+        //Create the parent and add the children
+        table.push(<tr>{children}</tr>)
+        k+=1
+        if (k == 4) {
+          k = 0
+        }
+      
+      return table
+  }
 
 
 
@@ -38,7 +68,13 @@ class TimeNSales extends Component{
                 <Row>
                 <Col sm={4}>
 
-                <Table striped bordered hover>
+                <Table striped bordered hover className="table table-lg">
+    <tbody>
+        {this.createUpperTable()}  
+
+          <tr>
+            <td colSpan={4}>
+            <Table striped bordered hover>
     <thead>
         <tr>
         <th>MM</th>
@@ -53,27 +89,18 @@ class TimeNSales extends Component{
     </thead>
     <tbody>
         {this.createTable()}  
-
-
-        {/* <tr>
-      <td>1</td>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td colSpan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr> */}
     </tbody>
     </Table>
+            </td>
+          </tr>
+
+
+
+    </tbody>
+    </Table>
+
+
+
     </Col>
                 </Row>
 
