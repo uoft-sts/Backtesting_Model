@@ -9,7 +9,7 @@ function ChartNew(){
         LightweightCharts = require('lightweight-charts');
         const { createChart } = LightweightCharts;
         var chart = LightweightCharts.createChart(document.body, {
-          width: 1200,
+          width: 1000,
           height: 300,
           
           layout: {
@@ -56,12 +56,20 @@ function ChartNew(){
         });
         
         candleSeries.setData([
-          {time: 497493,open:"12.75",close:"13.01",high:"13.06",low:"12.7"},
-          {time: 497593,open:"15.75",close:"13.01",high:"13.06",low:"12.7"},
-          {time: 497693,open:"13.75",close:"13.01",high:"13.06",low:"12.7"},
-          {time: 497793,open:"11.75",close:"13.01",high:"13.06",low:"12.7"},
-          {time: 497893,open:"10.75",close:"13.01",high:"13.06",low:"12.7"},
+          { time: 1618574549, open: 54.62, high: 55.50, low: 54.52, close: 54.90 },
+          { time: 1618574550, open: 55.08, high: 55.27, low: 54.61, close: 54.98 },
+          { time: 1618574551, open: 56.09, high: 57.47, low: 56.09, close: 57.21 },
+          { time: 1618574552, open: 57.00, high: 58.44, low: 56.41, close: 57.42 },
+          { time: 1618574553, open: 57.46, high: 57.63, low: 56.17, close: 56.43 },
+          { time: 1618574554, open: 56.26, high: 56.62, low: 55.19, close: 55.51 },
+          { time: 1618574555, open: 55.81, high: 57.15, low: 55.72, close: 56.48 },
+          { time: 1618574556, open: 56.92, high: 58.80, low: 56.92, close: 58.18 },
+          { time: 1618574557, open: 58.32, high: 58.32, low: 56.76, close: 57.09 },
+          { time: 1618574558, open: 56.98, high: 57.28, low: 55.55, close: 56.05 },
+          { time: 1618574559, open: 56.34, high: 57.08, low: 55.92, close: 56.63 }
         ]);
+
+
 
 
     },[]);

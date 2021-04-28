@@ -1,6 +1,7 @@
 import { FunctionComponent,useEffect, useState } from 'react';
 import { createChart,CrosshairMode } from 'lightweight-charts';
 import axios from "axios";
+import ChartNew from './ChartNew';
 
 const Simulation:FunctionComponent = () => {
     
@@ -283,7 +284,11 @@ const Simulation:FunctionComponent = () => {
       }
     }, 200);}
 
-    return <></>
+    return (
+      <div>
+        <ChartNew />
+      </div>
+    );
 }
 
 export default Simulation;
