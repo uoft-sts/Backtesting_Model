@@ -150,7 +150,7 @@ def result():
 
 @app.route('/simulation/', methods=['GET'])
 def getSimulationData():
-    df = pd.read_csv('./data/SimulationTrades.csv')
+    df = pd.read_csv('./data/SimulationTrades1.csv')
     unixTimeList = []
     priceList = df['PRICE'].tolist()
     tempDate = df['DATE'].tolist()
