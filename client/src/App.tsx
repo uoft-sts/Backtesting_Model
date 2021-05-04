@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { NavigationBar,TopHeader } from "./ts/components/index";
 
-import {Home, About, Simulation} from "./Home/index";
+import {Home, About} from "./Home/index";
 import Test from "./Test/index";
 
 import "./App.scss";
@@ -19,7 +19,6 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route exact path="/test" component={Test} />
             <Route exact path="/about" component={About} />
-            <Route exact path="/simulation" component={Simulation} />
           </Switch>
         </Router>
       </Container>
