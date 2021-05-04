@@ -1,5 +1,4 @@
 import React,{ FunctionComponent,useEffect, useState,Component} from 'react';
-import { Container,Row,Col } from 'react-bootstrap';
 import ChartNew from './ChartNew';
 import Level2 from './Level2';
 
@@ -12,23 +11,9 @@ class Simulation extends Component{
         
         return(
             <div>
-              <Container>
-                <Row>
-                  <Col>
-                  <p>haha</p>
-                    <ChartNew />
-                  </Col>
-                  <Col>
-                  <Row>
-                 
-                    <Level2 />
-                    <TimeNSales />
-                    
-                  </Row>
-                  </Col>
-                  </Row>
-                 
-                </Container>
+                <TimeNSales />
+                <Level2 />
+                <ChartNew />
 
             </div>
         )
