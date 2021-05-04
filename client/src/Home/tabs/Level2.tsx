@@ -2,6 +2,8 @@ import React,{ FunctionComponent,useEffect, useState,Component} from 'react';
 import ChartNew from './ChartNew';
 import { Form, Button, Row, Col, Table, Image, DropdownButton, Dropdown, Container } from "react-bootstrap";
 class Level2 extends Component{
+ 
+
     
     render(){
         let arr = []
@@ -72,44 +74,117 @@ class Level2 extends Component{
         
         return(
 
-            
+          
            <Container>
-               <Row>
-    <Col>
-  
-<Table striped bordered hover>
-    
-  <thead>
-    <tr>
-      <th>Market Makers</th>
-      
-      <th>Order Size</th>
-      <th>Price</th>
-    </tr>
-  </thead>
-  <tbody>
-   {arr}
-  </tbody>
-</Table>
-</Col>
-<Col>
-  
-<Table striped bordered hover>
-    
-  <thead>
-    <tr>
-      <th>Market Makers</th>
-      <th>Price</th>
-      <th>Order Size</th>
-    </tr>
-  </thead>
-  <tbody>
-   {arr}
-  </tbody>
-</Table>
-</Col>
-</Row>
+              <Table striped bordered hover>
+              <thead>
+                      <tr>
+                        
+                        
+                      </tr>
+
+                    </thead>
+                    <tbody>
+                     
+                      <tr>
+                        <td colSpan={2}>
+                        
+                    <Row>
+                      <Col>
+                      
+                            <Table striped bordered hover>
+                    <thead>
+                      <tr>
+                        
+                        
+                      </tr>
+
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>Last</th>
+                        <th>175.26</th>
+                        <th>-175.26</th>
+                    
+                      </tr>
+                      <tr>
+                        <th>Lv1</th>
+                        <th>175.26</th>
+                        <th>-175.26</th>
+                    
+                
+                      </tr>
+                      </tbody>
+                      </Table>
+                      </Col>
+                      <Col>
+                      <Table striped bordered hover>
+                    <thead>
+                      <tr>
+                        
+                        
+                      </tr>
+
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th>Vol</th>
+                        <th>175.26</th>
+                        
+                      </tr>
+                      <tr>
+                        <th>功能区</th>
+                        <th>功能区</th>
+                        
+                      </tr>
+                      </tbody>
+                </Table>
+                      </Col>
+                      </Row>
+                      </td>
+                      </tr>
+                      </tbody>
+                      <Row>
+            <Col>
+          
+          
+        <Table striped bordered hover>
+            
+          <thead>
+            <tr>
+              <th>Market Makers</th>
+              
+              <th>Order Size</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+          {arr}
+          </tbody>
+        </Table>
+        </Col>
+        <Col>
+          
+        <Table striped bordered hover>
+            
+          <thead>
+            <tr>
+              <th>Market Makers</th>
+              <th>Price</th>
+              <th>Order Size</th>
+            </tr>
+          </thead>
+          <tbody>
+          {arr}
+          </tbody>
+        </Table>
+        </Col>
+        </Row>
+          </Table>
 </Container>
+        
+
+
 
         )
     }
