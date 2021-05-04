@@ -127,8 +127,6 @@ class TimeNSales extends Component{
             </td>
 
             <td colSpan={2}>
-
-
     <Table striped bordered hover>
     <thead>
         <tr>
@@ -137,14 +135,11 @@ class TimeNSales extends Component{
         <th>Size</th>
         <th>Time</th>
         </tr>
-
-
     </thead>
     <tbody>
         {this.createTableRight()}  
     </tbody>
     </Table>
-
             </td>
           </tr>
 
