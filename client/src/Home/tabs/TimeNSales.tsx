@@ -105,40 +105,40 @@ class TimeNSales extends Component{
                 <Col sm={4}>
 
                 <Table striped bordered hover className="table table-lg">
-    <tbody>
+                  <tbody>
 
-        {this.createUpperTable()}  
+                      {this.createUpperTable()}  
 
-          <tr>
-            <td colSpan={2}>
-            <Table striped bordered hover>
-    <thead>
-        <tr>
-        <th>MM</th>
-        <th>Bid</th>
-        <th>Size</th>
-        <th>Time</th>
-        </tr>
-    </thead>
-    <tbody>
-        {this.createTableLeft()}  
-    </tbody>
-    </Table>
-            </td>
+                        <tr>
+                          <td colSpan={2}>
+                          <Table striped bordered hover>
+                            <thead>
+                                <tr>
+                                <th>MM</th>
+                                <th>Bid</th>
+                                <th>Size</th>
+                                <th>Time</th>
+                                </tr>
+                            </thead>
+                    <tbody>
+                        {this.createTableLeft()}  
+                    </tbody>
+                    </Table>
+                          </td>
 
-            <td colSpan={2}>
-    <Table striped bordered hover>
-    <thead>
-        <tr>
-        <th>MM</th>
-        <th>Bid</th>
-        <th>Size</th>
-        <th>Time</th>
-        </tr>
-    </thead>
-    <tbody>
-        {this.createTableRight()}  
-    </tbody>
+                          <td colSpan={2}>
+                  <Table striped bordered hover>
+                  <thead>
+                      <tr>
+                      <th>MM</th>
+                      <th>Bid</th>
+                      <th>Size</th>
+                      <th>Time</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      {this.createTableRight()}  
+                  </tbody>
     </Table>
             </td>
           </tr>
