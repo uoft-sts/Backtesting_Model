@@ -1,5 +1,8 @@
 import { FunctionComponent,useEffect, useState } from 'react';
 import axios from "axios";
+import { Container,Row,Col } from 'react-bootstrap';
+import Level2 from '../Home/tabs/Level2';
+import TimeNSales from '../Home/tabs/TimeNSales';
 
 const Simulation:FunctionComponent = () => {
     
@@ -202,7 +205,25 @@ const Simulation:FunctionComponent = () => {
     }, 200);}
 
     return (
-      <div/>
+      <div>
+              <Container>
+                <Row>
+                  <Col>
+                  <p>haha</p>
+                  </Col>
+                  <Col>
+                  <Row>
+                 
+                    <Level2 />
+                    <TimeNSales />
+                    
+                  </Row>
+                  </Col>
+                  </Row>
+                 
+                </Container>
+
+            </div>
     );
 }
 

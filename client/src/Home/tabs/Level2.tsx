@@ -1,5 +1,4 @@
 import React,{ FunctionComponent,useEffect, useState,Component} from 'react';
-import ChartNew from './ChartNew';
 import { Form, Button, Row, Col, Table, Image, DropdownButton, Dropdown, Container } from "react-bootstrap";
 class Level2 extends Component{
 
