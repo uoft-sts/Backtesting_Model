@@ -2,8 +2,10 @@ import React,{ FunctionComponent,useEffect, useState,Component} from 'react';
 import ChartNew from './ChartNew';
 import { Form, Button, Row, Col, Table, Image, DropdownButton, Dropdown, Container } from "react-bootstrap";
 class Level2 extends Component{
- 
 
+  
+ 
+    
     
     render(){
         let arr = []
@@ -13,6 +15,21 @@ class Level2 extends Component{
         let end_Num = start_Num+1;
         let endlist = 0;
         let color = 0;
+
+        const styles = {
+          grid: {
+              paddingLeft: 0,
+              paddingRight: 0
+          },
+          row: {
+              marginLeft: 0,
+              marginRight: 0
+          },
+          col: {
+              paddingLeft: 0,
+              paddingRight: 0
+          }
+      };
         
         
         while(endlist == 0){
@@ -76,21 +93,9 @@ class Level2 extends Component{
 
           
            <Container>
-              <Table striped bordered hover>
-              <thead>
-                      <tr>
-                        
-                        
-                      </tr>
-
-                    </thead>
-                    <tbody>
-                     
-                      <tr>
-                        <td colSpan={2}>
-                        
-                    <Row>
-                      <Col>
+              
+                    <Row style={styles.row}>
+                      <Col style={styles.col}>
                       
                             <Table striped bordered hover>
                     <thead>
@@ -117,7 +122,7 @@ class Level2 extends Component{
                       </tbody>
                       </Table>
                       </Col>
-                      <Col>
+                      <Col style={styles.col}>
                       <Table striped bordered hover>
                     <thead>
                       <tr>
@@ -141,11 +146,9 @@ class Level2 extends Component{
                 </Table>
                       </Col>
                       </Row>
-                      </td>
-                      </tr>
-                      </tbody>
-                      <Row>
-            <Col>
+                     
+                      <Row style={styles.row}>
+            <Col style={styles.col}>
           
           
         <Table striped bordered hover>
@@ -163,7 +166,7 @@ class Level2 extends Component{
           </tbody>
         </Table>
         </Col>
-        <Col>
+        <Col style={styles.col}>
           
         <Table striped bordered hover>
             
@@ -180,7 +183,7 @@ class Level2 extends Component{
         </Table>
         </Col>
         </Row>
-          </Table>
+          
 </Container>
         
 
