@@ -1,4 +1,5 @@
 import React,{ FunctionComponent,useEffect, useState,Component} from 'react';
+import { Container,Row,Col } from 'react-bootstrap';
 import ChartNew from './ChartNew';
 import Level2 from './Level2';
 import {Container, Row, Col} from 'react-bootstrap';
