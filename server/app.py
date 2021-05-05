@@ -148,8 +148,11 @@ def result():
     #print(data)
     return data   
 
-@app.route('/simulation/', methods=['GET'])
+@app.route('/simulation/', methods=['POST'])
 def getSimulationData():
+    content = request.values
+    date = content['date']
+    print(date)
     df = pd.read_csv('./data/SimulationTrades1.csv')
     unixTimeList = []
     priceList = df['PRICE'].tolist()

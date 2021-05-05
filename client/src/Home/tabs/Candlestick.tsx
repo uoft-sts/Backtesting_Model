@@ -37,7 +37,7 @@ const Candlestick: FunctionComponent = () => {
         const LightweightCharts = require('lightweight-charts');
         const chart = LightweightCharts.createChart(document.getElementById('root'), {
             width: 1000,
-            height: 300,
+            height: 600,
 
             layout: {
                 backgroundColor: '#000000',
@@ -204,7 +204,7 @@ const Candlestick: FunctionComponent = () => {
 
     return (
         <div>
-
+       
 
         </div>
     );
