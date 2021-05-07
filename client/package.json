@@ -7,10 +7,17 @@
   "build": {
     "appId": "sts.backtesting",
     "files": [
-      "build/**/*"
+      "build/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "src/**/*"
     ],
-    "directories": {
-      "buildResources": "assets"
+    "mac": {
+      "icon": "icons/alfina.icns"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icons/alfina.png"
     }
   },
   "dependencies": {
@@ -38,7 +45,7 @@
     "wait-on": "^5.2.1",
     "web-vitals": "^0.2.4"
   },
-  "main": "build/electron/electron.js",
+  "main": "public/electron.js",
   "homepage": "./",
   "scripts": {
     "start": "react-scripts start",

@@ -10,8 +10,8 @@ venv
 /coverage
 
 # production
-/build
-/dist
+/client/build
+/client/dist
 
 # misc
 .DS_Store

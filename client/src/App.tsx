@@ -15,11 +15,7 @@ function App() {
       <TopHeader/>
       <Container>
         <Router>
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/test" component={Test} />
-            <Route exact path="/about" component={About} />
-          </Switch>
+          <Test />
         </Router>
       </Container>
     </React.Fragment>
