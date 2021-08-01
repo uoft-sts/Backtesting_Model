@@ -1,5 +1,7 @@
 # STS Backtesting Model
 
+# To view a demo: http://uoft-sts.github.io/home-page-ui
+
 ## Scripts to get it running
 
 In the project directory, you can start the React frontend by going to **Terminal** or **Command Prompt**:
