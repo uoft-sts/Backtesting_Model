@@ -46,16 +46,18 @@
     "web-vitals": "^0.2.4"
   },
   "main": "public/electron.js",
-  "homepage": "./",
   "scripts": {
     "start": "react-scripts start",
     "react-build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron-build": "electron-builder",
-    "build": "npm run react-build && npm run electron-build",
+    "build": "npm run react-build",
+    "build-electron": "npm run react-build && npm run electron-build",
     "electron-react": "concurrently \"BROWSER=none npm run start\" \"wait-on http://localhost:3000 && electron .\"",
-    "package": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds"
+    "package": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -79,6 +81,8 @@
   "devDependencies": {
     "@types/react-plotly.js": "^2.2.4",
     "electron": "^11.4.2",
-    "electron-packager": "^15.2.0"
-  }
+    "electron-packager": "^15.2.0",
+    "gh-pages": "^3.2.3"
+  },
+  "homepage": "http://uoft-sts.github.io/Backtesting_Model"
 }

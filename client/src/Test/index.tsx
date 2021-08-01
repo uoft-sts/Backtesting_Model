@@ -383,7 +383,7 @@ const Test: FunctionComponent<any> = (props) => {
             <Form.Label>Underlying:</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Please enter underlying here"
+              placeholder="Please enter underlying here (Ex. AL - aluminum)"
               onChange={(e: any) => {
                 setFormData({ ...formData, underlying: e.target.value });
               }}
@@ -398,7 +398,7 @@ const Test: FunctionComponent<any> = (props) => {
             <Form.Label>Expiration Month:</Form.Label>
             <Form.Control
               type="number"
-              placeholder="Please enter expiration month here"
+              placeholder="Please enter expiration month here (Ex. 10)"
               required
               isInvalid={monthCheck}
               value={formData.expMonth}
